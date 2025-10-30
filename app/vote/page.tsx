@@ -8,15 +8,21 @@ type DataForBackend = {
     frameWork: string,
     email: string
 }
+type FeedbackType = { text: string, type: 'success' | 'error' } | null
 // page.tsx
+
+const GLOBAL_TIMING = 3000;
 export default function Vote() {
     const router = useRouter();
-
+    const [feedback, setFeedBack] = useState<FeedbackType>(null);
     useEffect(() => {
         const token = localStorage.getItem("authToken");
         if (!token) router.push("/signIn")
     }, [router]);
 
+    const clearFeedback = useCallback(() => {
+        setFeedBack(null);
+    }, []);
 
     const perfectFrameWork = ["Angular", "Next", "Nuxt"];
     const [votedData, setVotedData] = useState<DataForBackend | null>(null);
@@ -28,7 +34,7 @@ export default function Vote() {
     }, [])
     const handleSubmitWrapper = (eve: React.FormEvent) => {
         alert(`You voted for "${votedData?.frameWork}"`)
-        handleSubmit(eve, votedData, setUserVoted)
+        handleSubmit(eve, votedData, setUserVoted, setFeedBack, setDisableRadio, clearFeedback)
         setDisableRadio(true)
     }
     const handleLogout = () => {
@@ -36,9 +42,19 @@ export default function Vote() {
         router.push("/signIn")
 
     }
+    const feedbackClasses = feedback?.type === 'error'
+        ? 'bg-red-500 text-white'
+        : 'bg-green-500 text-white';
     return <>
-
-        <form className='h-fit w-fit flex justify-center items-center outline-1 outline-white shadow-lg shadow-gray-200  ' onSubmit={handleSubmitWrapper}>
+        {feedback && (
+            <div
+                className={`fixed top-5 left-1/2 transform -translate-x-1/2 p-3 rounded-lg shadow-xl z-50 ${feedbackClasses}`}
+                role="alert"
+            >
+                {feedback.text}
+            </div>
+        )}
+        <form className='h-fit w-fit flex justify-center items-center  bg-white text-black shadow-md shadow-gray-200  ' onSubmit={handleSubmitWrapper}>
             <section className='h-fit w-fit p-5  flex flex-col justify-evenly items-center select-none cursor-default gap-5'>
                 <section className="nav h-fit w-full p-5 border-b-2 border-gray-300   flex justify-between items-center select-none cursor-default">
                     <span className='self-start text-3xl  w-1/2 h-fit ' >
@@ -65,7 +81,7 @@ export default function Vote() {
     </>
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function handleSubmit(eve: React.FormEvent, votedData: DataForBackend | null, setUserVoted: any) {
+async function handleSubmit(eve: React.FormEvent, votedData: DataForBackend | null, setUserVoted: any, setFeedBack: any, setDisableRadio: any, clearFeedBack: any) {
     eve.preventDefault();
     if (votedData === null) {
         alert("please vote for some one");
@@ -77,20 +93,31 @@ async function handleSubmit(eve: React.FormEvent, votedData: DataForBackend | nu
     }
     try {
         const res = await fetch("/api/vote", fetchConfig);
-        await res.json();
+        const data = await res.json();
         if (res.ok) {
             setUserVoted(true);
+            setDisableRadio(true);
+            setFeedBack({ text: data.message || "Vote successful!", type: 'success' });
             alert("congratulation you completed the vote")
             console.log(res);
 
         }
         if (res.status === 403) {
-            alert("❌ You have already voted ")
+            // alert("❌ You have already voted ");
+            const errorMessage = data.message || `Vote failed with status ${res.status}.`;
+            setFeedBack({ text: errorMessage, type: 'error' });
+            setDisableRadio(true); // Re-enable button on error
         }
     }
     catch (err) {
         console.log(votedData)
-        console.log(err)
+        console.log(err);
+        setDisableRadio(false);
+        setFeedBack({ text: "something went wrong", type: 'error' });
+    }
+    finally {
+        // Schedule cleanup regardless of result
+        setTimeout(clearFeedBack, GLOBAL_TIMING);
     }
 }
 
@@ -137,28 +164,30 @@ function PollingList({ frameWorks, getVote, disableRadio }: { disableRadio: bool
                     if (disableRadio) {
                         bgColor = isSelected ? `${colors[index]} ` : 'bg-gray-500 '; // Selected stays blue (lighter), others gray
                     } else {
-                        bgColor = isSelected ? `${colors[index]} ` : 'bg-gray-200 ';
-                        console.log(colors[index])
+                        bgColor = isSelected ? `${colors[index]} ` : ' bg-gray-50  ';
                     }
+                    let invertImageColor;
                     if (bgColor === "bg-zinc-800 ") {
                         textColor = "text-white ";
+                        invertImageColor = " invert-100 ";
                     }
                     else {
                         textColor = "text-black "
+                        invertImageColor = " ";
                     }
                     const cursorStyle = disableRadio ? 'cursor-not-allowed ' : 'cursor-pointer ';
 
-                    return <li key={index} className="">
 
-                        <section className={'h-16 w-fit p-5 flex justify-center items-center ' + textColor + bgColor + cursorStyle}>
-                            <section className='h-fit w-fit flex justify-center items-center '>
-                                <input type="radio" name="frameWork" id={frameWork} className='hidden peer' value={frameWork} onChange={handleChangeWrapper}
+                    return <li key={index} className="">
+                        <section className={'h-16 w-fit p-5 flex justify-center items-center border-2 disabled:opacity-25 border-black ' + textColor + bgColor + cursorStyle}>
+                            <section className='h-fit w-full flex justify-center items-center '>
+                                <input type="radio" name="frameWork" id={frameWork} className='hidden disabled:opacity-25' value={frameWork} onChange={handleChangeWrapper}
                                     checked={selectedFW === frameWork} disabled={disableRadio} />
                                 <Image src={`/${frameWork}.${imgType[index]}`}
                                     alt={`${frameWork}Icon`}
                                     width={40}
                                     height={40}
-
+                                    className={invertImageColor}
                                 />
                                 <label htmlFor={frameWork} className={`h-full w-full p-5 `}>{frameWork}</label>
                             </section>

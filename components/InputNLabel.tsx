@@ -2,7 +2,7 @@
 "use client";
 import { FocusEvent, useState } from "react"
 import { checkPassword } from "./utils/input.utils";
-export type TInputType = "email" | "number" | "text" | "password" | "phoneNumber";
+export type TInputType = "email" | "number" | "text" | "password" | "phoneNumber" | "radio";
 export type TInpValue = {
     name: string,
     value: string

@@ -15,12 +15,16 @@ export default function Signin() {
             localStorage.getItem("authToken") && localStorage.getItem("userEmail");
         if (hasToken) router.replace("/"); // replace avoids going back to login with Back btn
     }, [router]);
+
     const formData = {
         email: "",
         password: ""
-    }
-    const inputClass = "border-green-400 shadow-md shadow-green-400"
-    const [userData, setUserData] = useState<ISignInDataForAPi>(formData)
+    };
+
+    const inputClass = "border-green-400 shadow-md shadow-green-400";
+
+    const [userData, setUserData] = useState<ISignInDataForAPi>(formData);
+
     const fields: IInputProps[] = [{
         id: "email",
         name: "Email",
@@ -33,9 +37,10 @@ export default function Signin() {
         name: "Password",
         type: "password",
         cls: inputClass,
-        getInpValueOnBlur: (value) => { handleBlur(value, setUserData) }
+        getInpValueOnBlur: (value) => { handleBlur(value, setUserData) ;}
     },
-    ]
+    ];
+
     const signingIn = (eve: React.FormEvent) => {
 
         console.log("Final user data:", userData);
@@ -43,6 +48,7 @@ export default function Signin() {
 
         eve.preventDefault();
     }
+
     return (
         <section className=" w-md p-5 flex justify-center items-center outline-[0.1px] outline-green-400 shadow-md text-green-400 shadow-green-400 flex-col gap-5">
             <div className="headingWrapper w-full p-1 h-fit flex justify-center items-center">
@@ -60,9 +66,11 @@ export default function Signin() {
 function validUser(formdata: any, route: any) {
     const { email, password } = formdata
     console.log(formdata)
+    const users=["sabareesh@gmail.com","ps@outlook.com","abc@gmail.com"];
+    const userPasswords="Abc@1234";
     // Simulate server delay
     setTimeout(() => {
-        if (email === "sabareesh@gmail.com" && password === "Abc@1234") {
+        if (users.includes(email) && password === userPasswords ) {
             // ✅ Mimic successful login
             localStorage.setItem("authToken", "fake-auth-key-123456");
             localStorage.setItem("userEmail", email);

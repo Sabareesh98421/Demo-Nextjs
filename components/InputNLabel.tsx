@@ -2,19 +2,9 @@
 "use client";
 import { FocusEvent, useState } from "react"
 import { checkPassword } from "./utils/input.utils";
-export type TInputType = "email" | "number" | "text" | "password" | "phoneNumber" | "radio";
-export type TInpValue = {
-    name: string,
-    value: string
-}
-export interface IInputProps {
-    id: string,
-    cls?: string,
-    name: string | undefined,
-    value?: string,
-    type: TInputType,
-    getInpValueOnBlur: (inpValue: TInpValue | null) => void
-}
+import { IInputProps, TInpValue } from "@/sharedUtils/CustomTypes";
+
+
 export function InputNLabel({ id, cls, name: htmlName, type: inpType, value: htmlValue, getInpValueOnBlur }: IInputProps) {
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState<string[]>([]);

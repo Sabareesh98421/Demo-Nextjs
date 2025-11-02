@@ -1,5 +1,5 @@
 "use client";
-import { IInputProps, TInpValue } from "@/components/InputNLabel"
+import { IInputProps, TInpValue } from "@/sharedUtils/CustomTypes";
 import { InputNLabel } from '../../../components/InputNLabel';
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -22,7 +22,6 @@ export default function Signin() {
     };
 
     const inputClass = "border-green-400 shadow-md shadow-green-400";
-
     const [userData, setUserData] = useState<ISignInDataForAPi>(formData);
 
     const fields: IInputProps[] = [{
@@ -39,16 +38,14 @@ export default function Signin() {
         cls: inputClass,
         getInpValueOnBlur: (value) => { handleBlur(value, setUserData) ;}
     },
-    ];
+];
 
     const signingIn = (eve: React.FormEvent) => {
-
         console.log("Final user data:", userData);
         validUser(userData, router)
-
         eve.preventDefault();
     }
-
+    
     return (
         <section className=" w-md p-5 flex justify-center items-center outline-[0.1px] outline-green-400 shadow-md text-green-400 shadow-green-400 flex-col gap-5">
             <div className="headingWrapper w-full p-1 h-fit flex justify-center items-center">

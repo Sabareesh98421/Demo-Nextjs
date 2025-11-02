@@ -40,6 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 app/test
+app/test/*
 app/_Topics
 app/data
+
+ap/about
 data/*

@@ -28,10 +28,12 @@ export default function Vote() {
     const [votedData, setVotedData] = useState<DataForBackend | null>(null);
     const [disableRadio, setDisableRadio] = useState(false);
     const [isUserVoted, setUserVoted] = useState(false);
+
     // Function passed to the child to receive the data
     const userVoteReceiver = useCallback((data: DataForBackend | null) => {
         setVotedData(data); // Update the state when the child calls this function
-    }, [])
+    }, []);
+    
     const handleSubmitWrapper = (eve: React.FormEvent) => {
         alert(`You voted for "${votedData?.frameWork}"`)
         handleSubmit(eve, votedData, setUserVoted, setFeedBack, setDisableRadio, clearFeedback)

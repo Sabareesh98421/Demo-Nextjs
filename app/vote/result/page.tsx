@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 type ResponseData = Record<string, number>;
 export default function Result() {
     const [results, setResults] = useState<ResponseData | null>(null);
-
+    
     // Derived State: True if we haven't successfully fetched anything yet
     const isLoading = results === null;
     useEffect(() => {

@@ -4,7 +4,7 @@ import "../globals.css";
 export default function SetAuthLayout({ children }: { children: ReactNode }) {
     return (
         <section >
-
+            <p>Welcome to Singup</p>
                 {children}
 
         </section>

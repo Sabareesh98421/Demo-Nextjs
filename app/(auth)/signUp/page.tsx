@@ -28,9 +28,8 @@ export default function Page():JSX.Element{
     }
 
     return(
-        <Box className="w-full flex  flex-col gap-2 ">
-
-        <FormControl component="form" className="w-full max-w-md  text-black rounded-lg flex justify-center items-center " sx={{bgcolor:"white",p:2}} onSubmit={handleSubmit}>
+        <Box className="w-6xl flex  gap-12 justify-between items-center flex-row  p-12 rounded-xl" sx={{bgcolor:"whitesmoke"}}>
+        <FormControl component="form" className="w-full max-w-md  text-black rounded-lg flex justify-center items-center flex-row shadow-2xl " sx={{bgcolor:"white",p:2,border:1,borderColor:"ghostwhite"}} onSubmit={handleSubmit}>
             <Typography variant="h3" textAlign="center" className={"border-b-2 block w-full"} > Sign Up</Typography>
             <Box className="w-full flex  flex-col gap-2 ">
                 {RenderFormFields<Form>(signUpForm,handleChange)}
@@ -46,6 +45,8 @@ export default function Page():JSX.Element{
             type="submit"
             >SignUp</Button>
         </FormControl>
+            <Box component="section">
+
             {(displayError && errors) &&  errors.map((eachError,index)=>
                 <Typography key={"errorID-"+index}
                     variant="body2"
@@ -55,6 +56,7 @@ export default function Page():JSX.Element{
                     {eachError}
                 </Typography>
             )}
+            </Box>
         </Box>
     )
 }

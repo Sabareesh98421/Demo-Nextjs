@@ -43,6 +43,6 @@ app/test
 app/test/*
 app/_Topics
 app/data
-
+ClinetUtils/*
 ap/about
 data/*

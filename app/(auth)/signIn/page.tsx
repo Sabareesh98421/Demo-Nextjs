@@ -3,6 +3,7 @@ import { IInputProps, TInpValue } from "@/sharedUtils/CustomTypes";
 import { InputNLabel } from '../../../components/InputNLabel';
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "@mui/material/Link";
 // signIn/page.tsx
 interface ISignInDataForAPi {
     email: string,
@@ -53,6 +54,7 @@ export default function Signin() {
             </div>
             <form className="w-full flex justify-center items-center flex-col gap-5 " onSubmit={signingIn}>
                 {RenderFormFields(fields)}
+                <Link href="/signUp">don't have an account? register here </Link>
                 <button type="submit" className="border-2 border-green-400 w-22 h-10 hover:bg-white hover:text-black">Submit</button>
             </form>
         </section>

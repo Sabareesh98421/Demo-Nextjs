@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
-import "../globals.css";
-// signIn/layout.tsx
+
+// counter/layout.tsx
 export default function SetAuthLayout({ children }: { children: ReactNode }) {
     return (
         <section >

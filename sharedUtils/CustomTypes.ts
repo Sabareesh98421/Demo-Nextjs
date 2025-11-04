@@ -1,5 +1,4 @@
 // CustomTypes.ts
-import {useState} from "react";
 
 export type TInputType = "email"
     | "number"
@@ -20,7 +19,21 @@ export interface IInputProps {
     getInpValueOnBlur:
     (inpValue: TInpValue | null) => void
 }
-export type CB_Void =(param:unknown)=>void
+
+
+export type DataForBackend = {
+    frameWork: string,
+    email: string
+}
+export type FeedbackType = { text: string, type: 'success' | 'error' } | null
+
+
+// export type CB_Void =(param:unknown)=>void
+
+
+export type ReturnVoidFunction =()=>void;
+
+
 export type ErrorMessage=string[]|null
 // Here unknown is better than generic Type, because I just validate and create new string here so unknown I fine I guess.
 export type ErrorMap = Record<string,unknown>;
@@ -30,4 +43,5 @@ export type Form= Record<string,unknown>
 export type FormHookReturns<T>={
     finalFormData: T;
     handleChange: (key: keyof T | string, value: unknown) => void;
+    resetForm:ReturnVoidFunction;
 }

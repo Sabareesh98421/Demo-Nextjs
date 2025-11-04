@@ -12,6 +12,7 @@ export const signUpForm:Form[] =[
         type:"password",
         name:"Password",
 
+
     }
     ,
     {

@@ -12,7 +12,7 @@ import {signUpForm,initialData} from "./_Inputfields";
 import Link from "@mui/material/Link";
 
 export default function Page():JSX.Element{
-    const {finalFormData:formData,handleChange} = useForm(initialData);
+    const {finalFormData:formData,handleChange,resetForm} = useForm(initialData);
     const [displayError,setDisplayError] = useState(false);
     const   errors :ErrorMessage= useErrorHandlingStates(formData);
     const handleSubmit=(eve:FormEvent)=>{
@@ -23,12 +23,13 @@ export default function Page():JSX.Element{
             return;
         } else {
             setDisplayError(false);
+            resetForm();
         }
         console.log(formData);
     }
 
     return(
-        <Box className="w-6xl flex  gap-12 justify-between items-center flex-row  p-12 rounded-xl" sx={{bgcolor:"whitesmoke"}}>
+        <Box className="w-6xl flex  gap-2 justify-evenly items-center flex-row  p-12 rounded-xl" sx={{bgcolor:"whitesmoke"}}>
         <FormControl component="form" className="w-full max-w-md  text-black rounded-lg flex justify-center items-center flex-row shadow-2xl " sx={{bgcolor:"white",p:2,border:1,borderColor:"ghostwhite"}} onSubmit={handleSubmit}>
             <Typography variant="h3" textAlign="center" className={"border-b-2 block w-full"} > Sign Up</Typography>
             <Box className="w-full flex  flex-col gap-2 ">
@@ -45,7 +46,7 @@ export default function Page():JSX.Element{
             type="submit"
             >SignUp</Button>
         </FormControl>
-            <Box component="section">
+            <Box component="section" className="font-medium text-sm">
 
             {(displayError && errors) &&  errors.map((eachError,index)=>
                 <Typography key={"errorID-"+index}

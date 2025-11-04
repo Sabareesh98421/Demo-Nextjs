@@ -1,6 +1,6 @@
 "use client";
 import { IInputProps, TInpValue } from "@/sharedUtils/CustomTypes";
-import { InputNLabel } from '../../../components/InputNLabel';
+import { InputNLabel } from '@/components/InputNLabel';
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "@mui/material/Link";
@@ -9,12 +9,12 @@ interface ISignInDataForAPi {
     email: string,
     password: string
 }
-export default function Signin() {
+export default function SignIn() {
     const router = useRouter();
     useEffect(() => {
         const hasToken =
             localStorage.getItem("authToken") && localStorage.getItem("userEmail");
-        if (hasToken) router.replace("/"); // replace avoids going back to login with Back btn
+        if (hasToken) router.replace("/"); // replace avoids going back to log in with Back btn
     }, [router]);
 
     const formData = {
@@ -50,11 +50,11 @@ export default function Signin() {
     return (
         <section className=" w-md p-5 flex justify-center items-center outline-[0.1px] outline-green-400 shadow-md text-green-400 shadow-green-400 flex-col gap-5">
             <div className="headingWrapper w-full p-1 h-fit flex justify-center items-center">
-                <h1 className="w-full h-fit p-1 font-bold text-3xl text-center underline underline-offset-4">Signin</h1>
+                <h1 className="w-full h-fit p-1 font-bold text-3xl text-center underline underline-offset-4">Sign in</h1>
             </div>
             <form className="w-full flex justify-center items-center flex-col gap-5 " onSubmit={signingIn}>
                 {RenderFormFields(fields)}
-                <Link href="/signUp">don't have an account? register here </Link>
+                <Link href="/signUp">don&#39;t have an account? register here </Link>
                 <button type="submit" className="border-2 border-green-400 w-22 h-10 hover:bg-white hover:text-black">Submit</button>
             </form>
         </section>
@@ -62,9 +62,9 @@ export default function Signin() {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function validUser(formdata: any, route: any) {
-    const { email, password } = formdata
-    console.log(formdata)
+function validUser(formData: any, route: any) {
+    const { email, password } = formData
+    console.log(formData)
     const users=["sabareesh@gmail.com","ps@outlook.com","abc@gmail.com"];
     const userPasswords="Abc@1234";
     // Simulate server delay

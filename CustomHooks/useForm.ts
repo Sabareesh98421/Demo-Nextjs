@@ -7,7 +7,10 @@ export function useForm<T extends Form>(formData:T):FormHookReturns<T>{
     function handleChange(key:keyof T,value:unknown){
         setFinalFormData((prev)=>({...prev,[key]:value}))
     }
-    return {finalFormData,handleChange};
+    function resetForm(){
+       return  setFinalFormData(formData);
+    }
+    return {finalFormData,handleChange,resetForm};
 }
 
 export function useErrorHandlingStates(formData:ErrorMap):ErrorMessage{
@@ -18,7 +21,7 @@ export function useErrorHandlingStates(formData:ErrorMap):ErrorMessage{
 
      for( const [key,value] of Object.entries(formData)){
             if(!value){
-                errorList.push(`The ${key} field is mandatory please make sure that you full filled completely`)
+                errorList.push(`The ${key} field is mandatory `)
             }
      }
    return errorList.length>0?errorList:null;

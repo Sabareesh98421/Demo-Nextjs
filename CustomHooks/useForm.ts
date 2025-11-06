@@ -13,7 +13,7 @@ export function useForm<T extends Form>(formData:T):FormHookReturns<T>{
     return {finalFormData,handleChange,resetForm};
 }
 
-export function useErrorHandlingStates(formData:ErrorMap):ErrorMessage{
+export function useErrorHandlingStates<T>(formData:ErrorMap<T>):ErrorMessage{
     return useMemo(():ErrorMessage=>{
 
 

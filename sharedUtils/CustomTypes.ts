@@ -1,5 +1,9 @@
 // CustomTypes.ts
-
+export interface SignUpFormData{
+   email:string,
+   password:string,
+   confirmPassword:string
+}
 export type TInputType = "email"
     | "number"
     | "text"
@@ -36,8 +40,8 @@ export type ReturnVoidFunction =()=>void;
 
 
 export type ErrorMessage=string[]|null
-// Here unknown is better than generic Type, because I just validate and create new string here so unknown I fine I guess.
-export type ErrorMap = Record<string,unknown>;
+// Here unknown is better than generic Type, because I just validate and create new string here, so unknown I fine I guess.
+export type ErrorMap<T> = Partial<Record<keyof T,unknown>>;
 
 // Form
 export type Form= Record<string,unknown>

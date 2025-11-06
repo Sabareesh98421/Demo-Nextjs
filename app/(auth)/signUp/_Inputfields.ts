@@ -22,9 +22,3 @@ export const signUpForm:Form[] =[
 
     }
 ]
-
-export const initialData = {
-    email: "",
-    password: "",
-    "confirm-password": ""
-};

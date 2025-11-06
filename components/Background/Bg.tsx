@@ -76,7 +76,7 @@ export const frameworkColors = [
 export function Bg({variant="section",children}:{variant:LayoutTag,children:React.ReactNode}){
     const theme = useTheme();
     return(
-        <Box component={variant} className="h-dvh w-dvw grid overflow-hidden" sx={{
+        <Box component={variant} className="h-dvh w-dvw grid overflow-hidden grid-rows-5"  sx={{
             backgroundColor:theme.palette.background.default,
 
         }} >
@@ -85,9 +85,11 @@ export function Bg({variant="section",children}:{variant:LayoutTag,children:Reac
                     container
                     spacing={{ xs: 2, sm: 3, md: 4 }}
                     sx={{
+                        width:"100%",
                         position: "absolute",
                         inset: 0,
                         zIndex: 0,
+                        display:"grid",
                         pointerEvents: "none",
                         p: { xs: 2, sm: 4, md: 6 },
                         alignContent: "space-evenly",
@@ -147,7 +149,7 @@ export function Bg({variant="section",children}:{variant:LayoutTag,children:Reac
                     ))}
                 </Grid>
 
-                {/* Content layer */}
+
                 <Box sx={{
                     position: "absolute",
                     top: 0,

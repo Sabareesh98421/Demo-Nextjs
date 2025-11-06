@@ -20,6 +20,7 @@ export interface IInputProps {
     (inpValue: TInpValue | null) => void
 }
 
+export type LayoutTag="section"|"div"|"main"|"header"|"footer"
 
 export type DataForBackend = {
     frameWork: string,

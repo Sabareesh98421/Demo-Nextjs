@@ -16,8 +16,9 @@ export function PollingList({ frameWorks, getVote, disableRadio }: { disableRadi
         return null; // Return null if running on the server
     });
     const colors = ["bg-red-400", "bg-zinc-800", "bg-green-800"];
-    const imgType = ["png", "png", "svg"];
+    const imgType = ["png", "png", "svg","png"];
     useEffect(() => {
+
         const userVote: DataForBackend = {
             email: "",
             frameWork: ""
@@ -35,19 +36,15 @@ export function PollingList({ frameWorks, getVote, disableRadio }: { disableRadi
 
     const handleChangeWrapper = (eve: React.ChangeEvent) => {
         handleVoteClick(eve, setFW);
-
     }
-
     return (
-        <List className='w-full h-full flex justify-center items-center gap-5'>
+        <List className='w-full h-full grid  sm:grid-cols-2 md:grid-cols-3 '>
             {frameWorks.map(
                 (frameWork, index) => {
 
                     const [textColor,bgColor,invertImageColor,cursorStyle] = customStyling(selectedFW,frameWork,disableRadio,colors,index)
 
-
-
-                    return <ListItem key={index} className="">
+                    return <ListItem key={index} className="self-stretch w-full">
                         <section className={'h-16 w-fit p-5 flex justify-center items-center border-2 disabled:opacity-25 border-black ' + textColor + bgColor + cursorStyle}>
                             <section className='h-fit w-full flex justify-center items-center '>
                                 <Radio name="frameWork" id={frameWork} className='disabled:opacity-25' sx={{display:"none"}} value={frameWork} onChange={handleChangeWrapper}

@@ -24,3 +24,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+.stroke-text {
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke-width: 2px;
+    paint-order: stroke fill;
+}
+
+/* For gradient strokes, the gradient class will provide the stroke color */
+.stroke-text.bg-gradient-to-r {
+    -webkit-text-stroke-color: inherit;
+}

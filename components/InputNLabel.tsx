@@ -23,7 +23,7 @@ export function InputNLabel({ id, cls, name: htmlName, type: inpType, value: htm
                 <label htmlFor={id}>{htmlName}</label>
                 <input id={id}
                     type={showPassword && inpType === "password" ? "text" : inpType}
-                    className={" border-[0.2px] p-1 pl-2 rounded-4xl " + cls} name={htmlName} value={htmlValue} onBlur={handleBlur} />
+                    className={" border-[0.2px] p-1 pl-2 rounded-sm " + cls} name={htmlName} value={htmlValue} onBlur={handleBlur} />
                 <span>
                     {inpType === "password" && (
                         <button

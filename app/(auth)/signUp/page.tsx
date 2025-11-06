@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import {signUpForm,initialData} from "./_Inputfields";
 import Link from "@mui/material/Link";
 
+
 export default function Page():JSX.Element{
     const {finalFormData:formData,handleChange,resetForm} = useForm(initialData);
     const [displayError,setDisplayError] = useState(false);
@@ -29,36 +30,39 @@ export default function Page():JSX.Element{
     }
 
     return(
-        <Box className="w-6xl flex  gap-2 justify-evenly items-center flex-row  p-12 rounded-xl" sx={{bgcolor:"whitesmoke"}}>
-        <FormControl component="form" className="w-full max-w-md  text-black rounded-lg flex justify-center items-center flex-row shadow-2xl " sx={{bgcolor:"white",p:2,border:1,borderColor:"ghostwhite"}} onSubmit={handleSubmit}>
-            <Typography variant="h3" textAlign="center" className={"border-b-2 block w-full"} > Sign Up</Typography>
-            <Box className="w-full flex  flex-col gap-2 ">
-                {RenderFormFields<Form>(signUpForm,handleChange)}
-                <Link textAlign="right" href="/signIn" sx={{
-                    m:2
-                }}>Already Logged in ? SignIn here</Link>
+
+            <Box className="w-6xl flex  gap-2 justify-evenly items-center flex-row  p-12 rounded-xl" >
+            <FormControl component="form" className="w-full max-w-md  text-black rounded-lg flex justify-center items-center flex-row shadow-2xl "
+                         sx={{bgcolor:"white",p:2,border:1,borderColor:"ghostwhite"}} onSubmit={handleSubmit}>
+                <Typography variant="h3" textAlign="center" className={"border-b-2 block w-full"} > Sign Up</Typography>
+                <Box className="w-full flex  flex-col gap-2 ">
+                    {RenderFormFields<Form>(signUpForm,handleChange)}
+                    <Link textAlign="right" href="/signIn" sx={{
+                        m:2
+                    }}>Already Logged in ? SignIn here</Link>
+                </Box>
+
+                <Button variant="contained" size="medium" fullWidth sx={{
+                    p:2
+                }}
+                        className="w-8"
+                type="submit"
+                >SignUp</Button>
+            </FormControl>
+                <Box component="section" className="font-medium text-sm">
+
+                {(displayError && errors) &&  errors.map((eachError,index)=>
+                    <Typography key={"errorID-"+index}
+                        variant="body2"
+                        color="error"
+                        sx={{ mt: 1, fontWeight: 500 }}
+                    >
+                        {eachError}
+                    </Typography>
+                )}
+                </Box>
             </Box>
 
-            <Button variant="contained" size="medium" fullWidth sx={{
-                p:2
-            }}
-                    className="w-8"
-            type="submit"
-            >SignUp</Button>
-        </FormControl>
-            <Box component="section" className="font-medium text-sm">
-
-            {(displayError && errors) &&  errors.map((eachError,index)=>
-                <Typography key={"errorID-"+index}
-                    variant="body2"
-                    color="error"
-                    sx={{ mt: 1, fontWeight: 500 }}
-                >
-                    {eachError}
-                </Typography>
-            )}
-            </Box>
-        </Box>
     )
 }
 

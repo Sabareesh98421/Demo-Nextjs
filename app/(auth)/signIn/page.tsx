@@ -22,7 +22,7 @@ export default function SignIn() {
         password: ""
     };
 
-    const inputClass = "border-green-400 shadow-md shadow-green-400";
+    const inputClass = "border-gray-400 shadow-md ";
     const [userData, setUserData] = useState<ISignInDataForAPi>(formData);
 
     const fields: IInputProps[] = [{
@@ -48,14 +48,14 @@ export default function SignIn() {
     }
     
     return (
-        <section className=" w-md p-5 flex justify-center items-center outline-[0.1px] outline-green-400 shadow-md text-green-400 shadow-green-400 flex-col gap-5">
+        <section className=" w-md p-5 flex justify-center items-center outline-[0.1px]  shadow-md bg-white text-black flex-col gap-5">
             <div className="headingWrapper w-full p-1 h-fit flex justify-center items-center">
                 <h1 className="w-full h-fit p-1 font-bold text-3xl text-center underline underline-offset-4">Sign in</h1>
             </div>
             <form className="w-full flex justify-center items-center flex-col gap-5 " onSubmit={signingIn}>
                 {RenderFormFields(fields)}
                 <Link href="/signUp">don&#39;t have an account? register here </Link>
-                <button type="submit" className="border-2 border-green-400 w-22 h-10 hover:bg-white hover:text-black">Submit</button>
+                <button type="submit" className="border-2  w-22 h-10 hover:bg-white hover:text-black">Submit</button>
             </form>
         </section>
     )

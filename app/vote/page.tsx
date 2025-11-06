@@ -11,10 +11,7 @@ import {PollingList} from "@/components/PoolingList/poolingList";
 import {DataForBackend, FeedbackType} from "@/sharedUtils/CustomTypes";
 import {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-
-
 // page.tsx
-
 const GLOBAL_TIMING = 3000;
 export default function Vote() {
     const router:AppRouterInstance = useRouter();
@@ -28,7 +25,9 @@ export default function Vote() {
         setFeedBack(null);
     }, []);
 
-    const perfectFrameWork = ["Angular", "Next", "Nuxt"];
+    const perfectFrameWork = ["Angular", "Next", "Nuxt","react","Nest","Vue"];
+
+
     const [votedData, setVotedData] = useState<DataForBackend | null>(null);
     const [disableRadio, setDisableRadio] = useState(false);
 
@@ -40,7 +39,7 @@ export default function Vote() {
     
     const handleSubmitWrapper = (eve: React.FormEvent) => {
         // alert(`You voted for "${votedData?.frameWork}"`)
-        handleSubmit(eve, votedData,  setFeedBack, setDisableRadio, clearFeedback,router)
+        handleSubmit(eve, votedData, setFeedBack, setDisableRadio, clearFeedback, router)
         setDisableRadio(true)
 
     }

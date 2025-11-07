@@ -1,10 +1,9 @@
 // PoolingResultsAPI.ts
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+
+import {AppAPI} from "@/features/RTK/CreateAPI/DefineAppApi";
 
 type ResponseData=Record<string,number>;
-export const pollingResultsAPI= createApi({
-    reducerPath:"vote/Result",
-    baseQuery:fetchBaseQuery({baseUrl:"/api/"}),
+export const pollingResultsAPI= AppAPI.injectEndpoints({
     endpoints:(build)=>({
         getVoteResults:build.query<ResponseData,void>({
             query:()=>"result"

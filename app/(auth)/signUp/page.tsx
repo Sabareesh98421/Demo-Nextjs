@@ -3,7 +3,7 @@ import {FormEvent, JSX, useState} from "react";
 import {useErrorHandlingStates} from "@/CustomHooks/useForm";
 import  FormControl from "@mui/material/FormControl";
 import Typography from  "@mui/material/Typography";
-import {ErrorMessage, Form, SignUpFormData} from "@/sharedUtils/CustomTypes";
+import {ErrorMessage, Form, SignUpFormData, SignUpResponse} from "@/sharedUtils/CustomTypes";
 import Box from "@mui/material/Box";
 import FormLabel from "@mui/material/FormLabel";
 import TextField from "@mui/material/TextField";
@@ -13,19 +13,21 @@ import Link from "@mui/material/Link";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/lib/Store";
 import {resetForm, setRegisterFormData} from "@/features/userSlice/Register/RegisterUser";
+import {useRegisterUserMutation} from "@/features/RTK/Query/userRegister/UserRegisterAPI";
 
 export default function Page():JSX.Element{
     const dispatchFormData=useDispatch();
     const formDataRedux:SignUpFormData=useSelector((formDataState:RootState)=>formDataState.Register)
-
     const [displayError,setDisplayError] = useState(false);
+    const [registerUser,mutationState] = useRegisterUserMutation<SignUpResponse>();
+    const { isLoading, isError, isSuccess, error } = mutationState;
     const   errors :ErrorMessage= useErrorHandlingStates<SignUpFormData>(formDataRedux);
 
     function changeHandlerRedux(field:  keyof  SignUpFormData,value:string){
 
         dispatchFormData(setRegisterFormData({key:field,value}))
     }
-    const handleSubmit=(eve:FormEvent)=>{
+    const handleSubmit=async (eve:FormEvent)=>{
 
         eve.preventDefault();
         if (errors) {
@@ -33,7 +35,8 @@ export default function Page():JSX.Element{
             return;
         } else {
             setDisplayError(false);
-            console.warn(formDataRedux)
+            console.warn(formDataRedux);
+
             dispatchFormData(resetForm())
             // resetForm();
         }

@@ -1,14 +1,13 @@
 "use client"
 // ./result/page.tsx
 import Link from "next/link";
-
 import {useGetVoteResultsQuery} from "@/features/RTK/Query/vote/Result/PoolingResultApi";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
-import LinearProgress from "@mui/material/LinearProgress";
 
-type ResponseData = Record<string, number>;
+
+
 export default function Result() {
 
     const {data:results,error,isLoading} = useGetVoteResultsQuery();
@@ -66,27 +65,4 @@ export default function Result() {
             </div>
         </div>
     );
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function getResults(setResults: any) {
-    try {
-        const res = await fetch("/api/result");
-        if (!res.ok) {
-            console.error("Failed to fetch results. Status:", res.status);
-
-            return;
-        }
-
-        // CRITICAL FIX: Await the res.json() call
-        const data: ResponseData = await res.json();
-        console.log(data);
-
-        // Store the data and stop loading state
-        setResults(data);
-    }
-    catch (err) {
-        console.error(err)
-        setResults({} as ResponseData)
-    }
 }

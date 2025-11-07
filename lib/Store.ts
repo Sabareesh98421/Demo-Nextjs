@@ -3,12 +3,13 @@ import {configureStore} from "@reduxjs/toolkit";
 import countSlicer from "@/features/CounterSlice/counterSlice";
 import {pollingResultsAPI} from "@/features/RTK/Query/vote/Result/PoolingResultApi";
 import RegisterUserSlice from "@/features/userSlice/Register/RegisterUser";
+import {AppAPI} from "@/features/RTK/CreateAPI/DefineAppApi";
 
 export function demoStore(){
     return configureStore({
         reducer:
             {
-                [pollingResultsAPI.reducerPath]:pollingResultsAPI.reducer,
+                [AppAPI.reducerPath]:AppAPI.reducer,
                 counter:countSlicer,
                 Register:RegisterUserSlice
                 // userData:userSlicer

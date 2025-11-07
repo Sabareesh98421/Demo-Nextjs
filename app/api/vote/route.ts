@@ -1,14 +1,14 @@
 // route.ts
 import { NextResponse } from "next/server";
-import * as fs from "fs/promises";
-import * as path from "path";
+import { FilesHandling} from "@/serverUtils/fileHandling";
+
 // Define the structure of your mock data file
 type FrameworkData = {
     emails: string[];
     totalVotes: number;
 }
 type VoteData = Record<string, FrameworkData>;
-const dataFilePath = path.join(process.cwd(), "data", "votes.json");
+
 
 // Initialize default data
 const defaultVotes: VoteData = {
@@ -16,22 +16,13 @@ const defaultVotes: VoteData = {
     "Nuxt": { emails: [], totalVotes: 0 },
     "Angular": { emails: [], totalVotes: 0 },
 };
+// per instance for per db/json file
+const fs = new FilesHandling("votes.json")
 
-async function ensureDataFile() {
-    try {
-        await fs.access(dataFilePath);
-    } catch {
-        // File doesn't exist, create it
-        const dirPath = path.dirname(dataFilePath);
-        await fs.mkdir(dirPath, { recursive: true });
-        await fs.writeFile(dataFilePath, JSON.stringify(defaultVotes, null, 2));
-    }
-}
 export async function POST(req: Request) {
     const res = NextResponse;
     try {
-        await ensureDataFile();
-        console.log("dataFilePath : ", dataFilePath) //not logging in the server
+        await fs.ensureDataFile<VoteData>(defaultVotes);
         const { email, frameWork } = await req.json();
         if (!frameWork || !email) {
             return res.json({ message: "Missing FrameWork or email" }, { status: 400 })
@@ -39,8 +30,7 @@ export async function POST(req: Request) {
         const trimmedFw = frameWork.trim();
 
         const loweredEmail = email.toLowerCase().trim();
-        const fileContent = await fs.readFile(dataFilePath, "utf-8");
-        const votes: VoteData = JSON.parse(fileContent);
+        const votes: VoteData = await  fs.readDataJson<VoteData>();
         const existingData = Object.values(votes);
         const isAlreadyVotedUser = existingData.some(fw => fw.emails.includes(email));
         if (isAlreadyVotedUser) {
@@ -56,7 +46,7 @@ export async function POST(req: Request) {
         }
         targetFw.emails.push(email);
         targetFw.totalVotes += 1;
-        await fs.writeFile(dataFilePath, JSON.stringify(votes, null, 2));
+        await fs.writeDataJson<VoteData>(votes);
         return res.json({ message: "Successfully Voted " }, { status: 201 })
     }
     catch (err) {

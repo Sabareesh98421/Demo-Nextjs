@@ -23,7 +23,8 @@ export async function POST(req:Request){
             const userdata:SignUpFormData = await req.json();
             const {email,password,confirmPassword} = userdata;
             const existingData=await fs.readDataJson<SignUpFormData[]>()
-            if( isExistingUserFound(existingData,email)){
+            const loweredEmail:string = email.toLowerCase();
+            if( isExistingUserFound(existingData,loweredEmail)){
                 return res.json({message:"User already exists"},{status:409});
 
             }
@@ -35,7 +36,7 @@ export async function POST(req:Request){
             if(!(password === confirmPassword)){
                    return res.json({message:"Password Mismatch"}, {status:400});
             }
-            const loweredEmail:string = email.toLowerCase();
+
             const finalData={
                 email:loweredEmail,
                 password,

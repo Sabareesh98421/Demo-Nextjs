@@ -12,21 +12,22 @@ const modes={
         },
         text: {
             primary: '#333',
-            secondary: '#555',
+            secondary: '#121212',
         },
 
     },
     dark:{
         // 🌚 Dark mode colors
-        primary: { main: '#90caf9' },
-        secondary: { main: '#ce93d8' },
+        primary: { main: '#9c27b0' },
+        secondary: { main: '#1976d2' },
         background: {
             default: '#121212',
-            paper: '#1d1d1d',
+            paper: '#ffffff',
         },
         text: {
             primary: '#ffffff',
-            secondary: '#aaaaaa',
+            secondary: '#121212',
+
         },
     }
 }
@@ -48,6 +49,33 @@ const getDesignTokens=(mode: PaletteMode) => ({
     shape: {
         borderRadius: 10,
     },
+    components: {
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor:'rgba(0, 0, 0, 0.23)',
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor:'rgba(0, 0, 0, 0.23)',
+                    },
+
+                },
+                input: {
+                    '&:-webkit-autofill': {
+                        WebkitBoxShadow: `0 0 0 100px ${modes[mode].background.paper} inset`,
+                        WebkitTextFillColor: modes[mode].text.secondary,
+                    },
+                    '&:-webkit-autofill:hover': {
+                        WebkitBoxShadow: `0 0 0 100px ${modes[mode].background.paper} inset`,
+                    },
+                    '&:-webkit-autofill:focus': {
+                        WebkitBoxShadow: `0 0 0 100px ${modes[mode].background.paper} inset`,
+                    }
+                },
+            },
+        },
+    }
     // shadows: mode === "dark" ? darkModeShadow : undefined,
 
 });

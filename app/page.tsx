@@ -9,11 +9,11 @@ import {useTheme} from "@mui/material";
 export default function Home() {
 
   const router = useRouter();
-
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (!token) router.push("/signIn")
-  }, [router]);
+  //
+  // useEffect(() => {
+  //   const token = localStorage.getItem("authToken");
+  //   if (!token) router.push("/signIn")
+  // }, [router]);
 
   return (<>
     {<MainContent />}

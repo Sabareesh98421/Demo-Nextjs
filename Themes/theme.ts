@@ -23,6 +23,8 @@ const modes={
         background: {
             default: '#121212',
             paper: '#ffffff',
+            primary: { main: '#9c27b0' },
+            secondary: { main: '#1976d2' },
         },
         text: {
             primary: '#ffffff',

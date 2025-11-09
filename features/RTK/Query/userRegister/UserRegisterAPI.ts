@@ -1,5 +1,6 @@
 import {AppAPI} from "@/features/RTK/CreateAPI/DefineAppApi";
 import {SignUpFormData, SignUpResponse} from "@/sharedUtils/CustomTypes";
+import {HTTP_Method} from "@/serverUtils/Enums/HTTP_Enum";
 
 export const registerUserAPI = AppAPI.injectEndpoints(
     {
@@ -7,7 +8,7 @@ export const registerUserAPI = AppAPI.injectEndpoints(
             registerUser:build.mutation<SignUpResponse,SignUpFormData>({
                 query:(userData:SignUpFormData)=>({
                     url:"signUp",
-                    method:"POST",
+                    method:HTTP_Method.POST,
                     body:userData
                 })
             })

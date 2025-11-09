@@ -17,8 +17,11 @@ import {useRegisterUserMutation} from "@/features/RTK/Query/userRegister/UserReg
 import CircularProgress from "@mui/material/CircularProgress";
 import Snackbar from "@mui/material/Snackbar";
 import {Theme, useTheme} from "@mui/material";
+import {useRouter} from "next/navigation";
+import {HTTP_Method} from "@/serverUtils/Enums/HTTP_Enum";
 
 export default function Page():JSX.Element{
+    const router = useRouter();
     const theme:Theme = useTheme();
     const dispatchFormData=useDispatch();
     const [isLoadingBegins,setLoadingState] = useState<boolean>(false);
@@ -52,6 +55,8 @@ export default function Page():JSX.Element{
     const handleSubmit=async (eve:FormEvent)=>{
 
         eve.preventDefault();
+        // const validation = validateFormFields(formDataRedux);
+
         if (errors) {
             setDisplayError(true);
             return;
@@ -59,11 +64,11 @@ export default function Page():JSX.Element{
             setDisplayError(false);
             
             try {
-            const res:SignUpResponse = await registerUser(formDataRedux).unwrap();
+                const res:SignUpResponse = await registerUser(formDataRedux).unwrap();
 
                 setServerResponse(res.message);
-            console.log(res)
-
+                console.log(res)
+                router.push("/signIn")
             }
             catch(err){
                 console.error(err)
@@ -82,7 +87,7 @@ export default function Page():JSX.Element{
                     setServerResponse("")
                 }}/>
 
-            <FormControl component="form" className="w-full max-w-md  rounded-lg flex justify-center items-center flex-row shadow-2xl "
+            <FormControl component="form"  method={HTTP_Method.POST}  className="w-full max-w-md  rounded-lg flex justify-center items-center flex-row shadow-2xl "
                          sx={{bgcolor:"white",p:2,border:1,borderColor:"ghostwhite"}} onSubmit={handleSubmit}>
                 <Typography variant="h3" textAlign="center" className={"border-b-2 block w-full"} color={theme.palette.text.secondary}> Sign Up</Typography>
                 <Box className="w-full flex  flex-col gap-2 " sx={{color:theme.palette.text.secondary}}>
@@ -124,6 +129,7 @@ export default function Page():JSX.Element{
 
     )
 }
+
 
 
 function RenderFormFields<T extends Form>(fields:T[],value:SignUpFormData,theme:Theme,changeHandler:(field:keyof SignUpFormData,value:string)=>void) {

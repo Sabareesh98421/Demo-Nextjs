@@ -4,6 +4,14 @@ import { InputNLabel } from '@/components/InputNLabel';
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "@mui/material/Link";
+import Alert from "@mui/material/Alert";
+import Button from "@mui/material/Button";
+import LinearProgress from "@mui/material/LinearProgress";
+import{Theme,useTheme} from "@mui/material";
+import {useLoginUserMutation} from "@/features/RTK/Query/loginAPI/Loginapi";
+import {HTTP_Method} from "@/serverUtils/Enums/HTTP_Enum";
+import Snackbar from "@mui/material/Snackbar";
+
 // signIn/page.tsx
 interface ISignInDataForAPi {
     email: string,
@@ -11,6 +19,9 @@ interface ISignInDataForAPi {
 }
 export default function SignIn() {
     const router = useRouter();
+    const theme:Theme = useTheme();
+    const [snackbar, setSnackbar] = useState<SnackbarState>(null);
+    const [loginUser,{isLoading}] = useLoginUserMutation();
     useEffect(() => {
         const hasToken =
             localStorage.getItem("authToken") && localStorage.getItem("userEmail");
@@ -41,48 +52,99 @@ export default function SignIn() {
     },
 ];
 
-    const signingIn = (eve: React.FormEvent) => {
-        console.log("Final user data:", userData);
-        validUser(userData, router)
+
+    const signingIn = async (eve: React.FormEvent) => {
+        eve.preventDefault();
+        const validation = validateFormFields(userData);
+        if (!validation.isValid) {
+            setSnackbar({
+                message: validation.message,
+                severity: "warning"
+            });
+            return;
+        }
+        try{
+            const res = await loginUser(userData).unwrap();
+            setSnackbar({
+                message:res.message,
+                severity:"success"
+            })
+            console.log(res.message)
+            router.push("/")
+
+        }catch(err){
+            console.error(err)
+            setSnackbar({
+                message:err.data.message || "Login In failed" ,
+                severity:"error"
+            })
+        }
         eve.preventDefault();
     }
     
     return (
-        <section className=" w-md p-5 flex justify-center items-center outline-[0.1px]  shadow-md bg-white text-black flex-col gap-5">
+        <section className=" w-md p-5 flex justify-center  items-center outline-[0.1px]  shadow-md bg-white text-black flex-col gap-5">
+
+
+
+            <Snackbar
+                autoHideDuration={3000}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                open={!!snackbar}
+                onClose={() => setSnackbar(null)}
+            >
+                <Alert
+                    onClose={() => setSnackbar(null)}
+                    severity={snackbar?.severity}
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {snackbar?.message}
+                </Alert>
+            </Snackbar>
+            {
+                isLoading && (
+                    <div className="w-full relative -top-1 left-0 z-50">
+                        <LinearProgress color="primary" sx={{ height: '4px' }} />
+                    </div>
+                )
+            }
             <div className="headingWrapper w-full p-1 h-fit flex justify-center items-center">
                 <h1 className="w-full h-fit p-1 font-bold text-3xl text-center underline underline-offset-4">Sign in</h1>
             </div>
-            <form className="w-full flex justify-center items-center flex-col gap-5 " onSubmit={signingIn}>
+            <form method={HTTP_Method.POST} className="w-full flex justify-center items-center flex-col gap-5 " onSubmit={signingIn}>
                 {RenderFormFields(fields)}
                 <Link href="/signUp">don&#39;t have an account? register here </Link>
-                <button type="submit" className="border-2  w-22 h-10 hover:bg-white hover:text-black">Submit</button>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    disabled={isLoading}
+                    className="h-10"
+                    sx={{
+                        width:"auto",
+                        textTransform: 'none',
+                        fontWeight: 500,
+                    }}
+                >
+                    {isLoading ? "Signing in..." : "Submit"}
+                </Button>
             </form>
         </section>
     )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function validUser(formData: any, route: any) {
-    const { email, password } = formData
-    console.log(formData)
-    const users=["sabareesh@gmail.com","ps@outlook.com","abc@gmail.com"];
-    const userPasswords="Abc@1234";
-    // Simulate server delay
-    setTimeout(() => {
-        if (users.includes(email) && password === userPasswords ) {
-            // ✅ Mimic successful login
-            localStorage.setItem("authToken", "fake-auth-key-123456");
-            localStorage.setItem("userEmail", email);
-            console.log("✅ Logged in successfully (token stored in browser)");
-            console.log("Status: 200 OK");
-            route.push("/")
-        } else {
-            // ❌ Mimic failed login
-            localStorage.removeItem("authToken");
-            alert("❌ Invalid credentials");
-            console.error("401 Unauthorized");
-        }
-    }, 600);
+// Validation function outside component
+function validateFormFields(data: ISignInDataForAPi): { isValid: boolean; message: string } {
+    if (!data.email || data.email.trim() === "") {
+        return { isValid: false, message: "Email is required" };
+    }
+
+    if (!data.password || data.password.trim() === "") {
+        return { isValid: false, message: "Password is required" };
+    }
+
+    return { isValid: true, message: "" };
 }
 
 function handleBlur(

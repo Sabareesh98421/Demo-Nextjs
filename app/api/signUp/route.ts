@@ -1,5 +1,5 @@
 import {FilesHandling} from "@/serverUtils/fileHandling";
-import {SignUpFormData} from "@/sharedUtils/CustomTypes";
+import {SignUpFormData, UserData} from "@/sharedUtils/CustomTypes";
 import {NextResponse} from "next/server";
 
 const fs = new FilesHandling("users.json")
@@ -12,17 +12,17 @@ function hasMissingFields(userData:SignUpFormData){
     }
 
 }
-function isExistingUserFound(existingData:SignUpFormData[],email:string){
+function isExistingUserFound(existingData:UserData[],email:string){
     return existingData.some((eachUser)=>eachUser.email === email)
 }
 
 export async function POST(req:Request){
     const res = NextResponse;
     try{
-            await fs.ensureDataFile<SignUpFormData[]>([]);
+            await fs.ensureDataFile<UserData[]>([]);
             const userdata:SignUpFormData = await req.json();
             const {email,password,confirmPassword} = userdata;
-            const existingData=await fs.readDataJson<SignUpFormData[]>()
+            const existingData=await fs.readDataJson<UserData[]>()
             const loweredEmail:string = email.toLowerCase();
             if( isExistingUserFound(existingData,loweredEmail)){
                 return res.json({message:"User already exists"},{status:409});
@@ -39,11 +39,10 @@ export async function POST(req:Request){
 
             const finalData={
                 email:loweredEmail,
-                password,
-                confirmPassword
+                password
             }
             existingData.push(finalData)
-            await fs.writeDataJson<SignUpFormData[]>(existingData);
+            await fs.writeDataJson<UserData[]>(existingData);
         return res.json({message:"user Registered Successfully"},{status:201});
     }
     catch(err){

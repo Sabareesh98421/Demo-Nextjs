@@ -4,12 +4,36 @@ export interface SignUpFormData{
    password:string,
    confirmPassword:string
 }
-
+export interface UserData{
+    email:string,
+    password:string,
+}
 export type SignUpResponse = {
-    status: boolean;
+    status: number;
     message: string;
 };
 
+export interface ResponseGeneratorParam<T=unknown>{
+    status?:number,
+    message?:string,
+    data?:T|null
+}
+
+export type LoginFormData = UserData;
+
+
+
+export interface LoginResponse{
+    status:number,
+    message:string
+}
+export interface ServerResponse{
+    status:number,
+    message:string
+}
+export interface ServerResponseWithData<T> extends ServerResponse{
+    data:T
+}
 export type TInputType = "email"
     | "number"
     | "text"

@@ -7,7 +7,7 @@ import Link from "@mui/material/Link";
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
-import{Theme,useTheme} from "@mui/material";
+import {AlertColor, Theme, useTheme} from "@mui/material";
 import {useLoginUserMutation} from "@/features/RTK/Query/loginAPI/Loginapi";
 import {HTTP_Method} from "@/serverUtils/Enums/HTTP_Enum";
 import Snackbar from "@mui/material/Snackbar";
@@ -17,10 +17,14 @@ interface ISignInDataForAPi {
     email: string,
     password: string
 }
+interface SnackbarState{
+    message:string,
+    severity: AlertColor
+}
 export default function SignIn() {
     const router = useRouter();
     const theme:Theme = useTheme();
-    const [snackbar, setSnackbar] = useState<SnackbarState>(null);
+    const [snackbar, setSnackbar] = useState<SnackbarState|null>(null);
     const [loginUser,{isLoading}] = useLoginUserMutation();
     useEffect(() => {
         const hasToken =
@@ -72,7 +76,7 @@ export default function SignIn() {
             console.log(res.message)
             router.push("/")
 
-        }catch(err){
+        }catch(err:any){
             console.error(err)
             setSnackbar({
                 message:err.data.message || "Login In failed" ,

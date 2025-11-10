@@ -15,8 +15,8 @@ export function PollingList({ frameWorks, getVote, disableRadio }: { disableRadi
         }
         return null; // Return null if running on the server
     });
-    const colors = ["bg-red-400", "bg-zinc-800", "bg-green-800"];
-    const imgType = ["png", "png", "svg","png"];
+    const colors = ["bg-red-400", "bg-zinc-800", "bg-green-800","bg-blue-200","bg-red-200","bg-green-800"];
+    const imgType = ["png", "png", "svg","png","svg","svg"];
     useEffect(() => {
 
         const userVote: DataForBackend = {

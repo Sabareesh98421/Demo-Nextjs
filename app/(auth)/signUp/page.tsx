@@ -91,7 +91,9 @@ export default function Page():JSX.Element{
                          sx={{bgcolor:"white",p:2,border:1,borderColor:"ghostwhite"}} onSubmit={handleSubmit}>
                 <Typography variant="h3" textAlign="center" className={"border-b-2 block w-full"} color={theme.palette.text.secondary}> Sign Up</Typography>
                 <Box className="w-full flex  flex-col gap-2 " sx={{color:theme.palette.text.secondary}}>
-                    {RenderFormFields<Form>(signUpForm,formDataRedux,theme,changeHandlerRedux)}
+                    {
+                        RenderFormFields<Form>(signUpForm,formDataRedux,theme,changeHandlerRedux)
+                    }
 
                     <Link textAlign="right" href="/signIn" sx={{
                         m:2

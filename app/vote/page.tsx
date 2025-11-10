@@ -25,7 +25,7 @@ export default function Vote() {
         setFeedBack(null);
     }, []);
 
-    const perfectFrameWork = ["Angular", "Next", "Nuxt","react","Nest","Vue"];
+    const perfectFrameWork = ["Angular", "Next", "Nuxt","React","Nest","Vue"];
 
 
     const [votedData, setVotedData] = useState<DataForBackend | null>(null);

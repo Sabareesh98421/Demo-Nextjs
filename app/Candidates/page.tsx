@@ -11,8 +11,8 @@ export default function Candidates(){
     return (
             <Grid className="overflow-auto overflow-x-hidden h-full "  container
                   direction="column">
-                    <Typography component="h1"  textAlign="center" m={2} >
-                        Candidate Lists
+                    <Typography component="h1"  textAlign="center" m={2} fontSize={20} fontWeight={28}>
+                        Candidate Lists (click for details)
                     </Typography>
                 <Grid container  spacing={3}>
 

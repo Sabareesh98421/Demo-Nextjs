@@ -81,73 +81,56 @@ export function Bg({variant="section",children}:{variant:LayoutTag,children:Reac
 
         }} >
 
-                <Grid
-                    container
-                    spacing={{ xs: 2, sm: 3, md: 4 }}
-                    sx={{
-                        width:"100%",
-                        position: "absolute",
-                        inset: 0,
-                        zIndex: 0,
-                        display:"grid",
-                        pointerEvents: "none",
-                        p: { xs: 2, sm: 4, md: 6 },
-                        alignContent: "space-evenly",
-                        gridTemplateColumns: {
-                            xs: "repeat(auto-fill, minmax(120px, 1fr))",
-                            sm: "repeat(auto-fill, minmax(150px, 1fr))",
-                            md: "repeat(auto-fill, minmax(180px, 1fr))",
-                            lg: "repeat(auto-fill, minmax(200px, 1fr))",
-                        },
-                        gridAutoRows: {
-                            xs: "minmax(80px, auto)",
-                            sm: "minmax(100px, auto)",
-                            md: "minmax(120px, auto)",
-                        },
-                        gap: { xs: 2, sm: 3, md: 4 },
-
-                        m: 0,
-                    }}
-                >
-                    {frameworkColors.map((framework, index) => (
-                        <Grid
-                            key={index}
-                            size={{ xs: 6, sm: 4, md: 3, lg: 2.4 }}
-                            sx={{
-                                alignContent: "space-evenly",
-                                gridTemplateColumns: {
-                                    xs: "repeat(auto-fill, minmax(120px, 1fr))",
-                                    sm: "repeat(auto-fill, minmax(150px, 1fr))",
-                                    md: "repeat(auto-fill, minmax(180px, 1fr))",
-                                    lg: "repeat(auto-fill, minmax(200px, 1fr))",
-                                },
-                                gridAutoRows: {
-                                    xs: "minmax(80px, auto)",
-                                    sm: "minmax(100px, auto)",
-                                    md: "minmax(120px, auto)",
-                                },
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    transform: `rotate(${(index % 5 - 2) * 6}deg)`,
-                                    opacity: 0.1 + (index % 5) * 0.05,
-                                }}
-                            >
+            <Box className="w-full h-full absolute grid"
+                sx={{
+                    inset: 0,
+                    zIndex: 0,
+                    pointerEvents: "none",
+                    p: { xs: 2, sm: 4, md: 6 },
+                    gridTemplateColumns: {
+                        xs: "repeat(auto-fill, minmax(150px, 1fr))",
+                        sm: "repeat(auto-fill, minmax(180px, 1fr))",
+                        md: "repeat(auto-fill, minmax(220px, 1fr))",
+                        lg: "repeat(auto-fill, minmax(250px, 1fr))",
+                    },
+                    gridTemplateRows: {
+                        xs: "repeat(auto-fill, 120px)",
+                        sm: "repeat(auto-fill, 140px)",
+                        md: "repeat(auto-fill, 160px)",
+                    },
+                    gap: { xs: 3, sm: 4, md: 5 },
+                    alignItems: "center",
+                    justifyItems: "center",
+                    overflow: "hidden",
+                }}
+            >
+                {frameworkColors.map((framework, index) => (
+                    <Box
+                        key={index}
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transform: `rotate(${(index % 5 - 2) * 6}deg)`,
+                            opacity: 0.08 + (index % 5) * 0.04,
+                            width: "100%",
+                            height: "100%",
+                        }}
+                    >
                            <span
                                className={`font-extrabold select-none stroke-text ${framework.className}`}
                                style={{
-                                   fontSize: "clamp(2rem, 4vw, 4.5rem)",
-                                   WebkitTextStroke: "2px",
+                                   fontSize: "clamp(1.5rem, 3vw, 3.5rem)",
+                                   WebkitTextStroke: "1.5px",
                                    paintOrder: "stroke fill",
+                                   whiteSpace: "nowrap",
                                }}
                            >
                                 {framework.word}
                             </span>
-                            </Box>
-                        </Grid>
-                    ))}
-                </Grid>
+                    </Box>
+                ))}
+            </Box>
 
 
                 <Box sx={{

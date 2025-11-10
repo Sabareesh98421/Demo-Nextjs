@@ -2,6 +2,7 @@
 import { createTheme, Shadows } from '@mui/material/styles';
 import {PaletteMode} from "@mui/material";
 
+
 const modes={
     light: {
         primary: { main: '#1976d2' },
@@ -33,18 +34,30 @@ const modes={
         },
     }
 }
-// const darkModeShadow: Shadows = [
-//     "none",
-//     "0px 1px 3px rgba(255, 255, 255, 0.05)",
-//     "0px 1px 5px rgba(255, 255, 255, 0.08)",
-//     "0px 2px 8px rgba(255, 255, 255, 0.1)",
-//     ...Array(21).fill("0px 2px 10px rgba(255, 255, 255, 0.12)"),
-// ] as Shadows;
+
+const darkModeShadow:Shadows = [
+    "none",
+    "0px 1px 3px rgba(255, 255, 255, 0.05)",
+    "0px 1px 5px rgba(255, 255, 255, 0.08)",
+    "0px 2px 8px rgba(255, 255, 255, 0.1)",
+    ...Array(21).fill("0px 2px 10px rgba(255, 255, 255, 0.12)"),
+] as Shadows;
+const materialLightShadow: Shadows = [
+    "none", // 0
+    "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
+    "0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)",
+    "0px 3px 3px -2px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14), 0px 1px 8px 0px rgba(0,0,0,0.12)",
+    "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
+
+    ...Array(20).fill("0px 3px 5px -1px rgba(0,0,0,0.2), 0px 5px 8px 0px rgba(0,0,0,0.14), 0px 1px 14px 0px rgba(0,0,0,0.12)"),
+] as Shadows;
 const getDesignTokens=(mode: PaletteMode) => ({
     palette: {
         mode,
         ...(mode === 'light' ? modes.light : modes.dark),
     },
+    shadows:mode==="dark"?darkModeShadow:materialLightShadow,
+
     typography: {
         fontFamily: `'Poppins', 'Roboto', sans-serif`,
     },
@@ -81,6 +94,5 @@ const getDesignTokens=(mode: PaletteMode) => ({
     // shadows: mode === "dark" ? darkModeShadow : undefined,
 
 });
-
 
 export const AppTheme=(mode: PaletteMode) => createTheme(getDesignTokens(mode))

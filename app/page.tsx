@@ -26,7 +26,7 @@ function MainContent() {
     const theme = useTheme();
   return (
     <Box  className="flex min-h-screen h-full w-full items-center justify-center  font-sans  overflow-x-hidden  flex-col" sx={{color:theme.palette.text.primary, transition: "box-shadow 0.3s ease, background-color 0.3s ease",}}>
-     {/*<Candidates></Candidates>*/}
+     <Candidates></Candidates>
     </Box>
   );
 }

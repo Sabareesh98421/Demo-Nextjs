@@ -73,7 +73,8 @@ export default function SignIn() {
                 message:res.message,
                 severity:"success"
             })
-            console.log(res.message)
+            console.log(res.message);
+            setLocalStorage(userData.email);
             router.push("/")
 
         }catch(err:any){
@@ -151,6 +152,10 @@ function validateFormFields(data: ISignInDataForAPi): { isValid: boolean; messag
     return { isValid: true, message: "" };
 }
 
+function setLocalStorage(email:string){
+    localStorage.setItem("authToken", "fake-auth-key-123456");
+    localStorage.setItem("userEmail",email);
+}
 function handleBlur(
     value: TInpValue | null,
     setUserData: Dispatch<SetStateAction<ISignInDataForAPi>>

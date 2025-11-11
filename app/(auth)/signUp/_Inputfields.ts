@@ -16,7 +16,7 @@ export const signUpForm:Form[] =[
     }
     ,
     {
-        id:"confirm-password",
+        id:"confirmPassword",
         type:"password",
         name:"Confirm Password",
 

@@ -153,7 +153,6 @@ function validateFormFields(data: ISignInDataForAPi): { isValid: boolean; messag
 }
 
 function setLocalStorage(email:string){
-    localStorage.setItem("authToken", "fake-auth-key-123456");
     localStorage.setItem("userEmail",email);
 }
 function handleBlur(

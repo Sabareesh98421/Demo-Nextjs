@@ -1,10 +1,9 @@
 // store.ts
 import {configureStore} from "@reduxjs/toolkit";
 import countSlicer from "@/features/CounterSlice/counterSlice";
-import {pollingResultsAPI} from "@/features/RTK/Query/vote/Result/PoolingResultApi";
 import RegisterUserSlice from "@/features/userSlice/Register/RegisterUser";
 import {AppAPI} from "@/features/RTK/CreateAPI/DefineAppApi";
-import {loginAPISlice} from "@/features/RTK/Query/loginAPI/Loginapi";
+
 
 export function demoStore(){
     return configureStore({
@@ -13,10 +12,9 @@ export function demoStore(){
                 [AppAPI.reducerPath]:AppAPI.reducer,
                 counter:countSlicer,
                 Register:RegisterUserSlice,
-                Login: loginAPISlice
                 // userData:userSlicer
             },
-        middleware:(getDefaultMiddleware)=>getDefaultMiddleware().concat(pollingResultsAPI.middleware)
+        middleware:(getDefaultMiddleware)=>getDefaultMiddleware().concat(AppAPI.middleware)
     })
 }
 

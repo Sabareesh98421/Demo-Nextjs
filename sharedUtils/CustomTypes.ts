@@ -4,6 +4,8 @@ export interface SignUpFormData{
    password:string,
    confirmPassword:string
 }
+
+
 export interface UserData{
     email:string,
     password:string,

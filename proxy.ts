@@ -14,5 +14,5 @@ export function proxy(req:NextRequest){
     return jwtParserMiddleWare(token,pathName)
 }
 export const config={
-    matcher:[ '/((?!api/LogIn|api/signup|signIn|signUp|ForgotPassword|_next|favicon\\.ico|images|fonts).*)',]
+    matcher:[ '/((?!api/LogIn|api/signUp|signIn|signUp|ForgotPassword|_next|favicon\\.ico|images|fonts).*)',]
 }

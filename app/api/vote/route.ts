@@ -1,16 +1,9 @@
 // route.ts
 import { NextResponse } from "next/server";
 import { FilesHandling} from "@/serverUtils/fileHandling";
-
-// Define the structure of your mock data file
-type FrameworkData = {
-    emails: string[];
-    totalVotes: number;
-}
-type VoteData = Record<string, FrameworkData>;
+import {VoteData} from "@/sharedUtils/CustomTypes";
 
 
-// Initialize default data
 const defaultVotes: VoteData = {
     "Next": { emails: [], totalVotes: 0 },
     "Nuxt": { emails: [], totalVotes: 0 },

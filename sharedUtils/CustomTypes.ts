@@ -4,11 +4,21 @@ export interface SignUpFormData{
    password:string,
    confirmPassword:string
 }
-
+export enum Role{
+    Admin="Admin",
+    User = "User"
+}
+// Define the structure of your mock data file
+export type FrameworkData = {
+    emails: string[];
+    totalVotes: number;
+}
+export type VoteData = Record<string, FrameworkData>;
 
 export interface UserData{
     email:string,
     password:string,
+    role: Role
 }
 export type SignUpResponse = {
     status: number;

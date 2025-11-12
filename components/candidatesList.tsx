@@ -22,7 +22,7 @@ interface DetailsProps{
 export default function CandidateList({name,img,pros,cons,expanded,onClick}:CandidateListProps){
     return(
 
-        <Box className="relative rounded-xl  cursor-pointer transition-all duration-300 flex flex-row "
+        <Box className="relative rounded-xl  cursor-pointer transition-all duration-300 flex flex-row   "
             sx={{
                 boxShadow: 3,
                 transition: "all 0.4s ease",
@@ -32,14 +32,23 @@ export default function CandidateList({name,img,pros,cons,expanded,onClick}:Cand
             }}
              onClick={onClick}
         >
-            <Box className="flex justify-around items-center flex-col">
-                <Image
-                src={img}
-                alt={name}
-                width={800}
-                height={500}
-                className="w-full h-auto block"
+            <Box className="flex justify-around items-center flex-col"
+            >
+                <Box component="section"   sx={{
+                    width: "100%",
+
+                    overflow: "hidden",
+                    padding:2,
+
+                }}>
+                    <Image
+                    src={img}
+                    alt={name}
+                    width={800}
+                    height={500}
+                    className="w-full h-auto block object-cover"
                 />
+                </Box>
                 <Typography variant="h2" textAlign="center" p={2} className="w-full">
                     {name}
                 </Typography>

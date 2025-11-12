@@ -3,7 +3,7 @@ import "../globals.css";
 // signIn/layout.tsx
 export default function SetAuthLayout({ children }: { children: ReactNode }) {
     return (
-        <section >
+        <section className="flex justify-center items-center h-full w-full">
 
                 {children}
 

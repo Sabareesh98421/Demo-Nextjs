@@ -38,7 +38,7 @@ export default function RootLayout({
         <ReduxStoreProvider>
             <ThemeProviderWrapper>
                 <Bg variant="section">
-                    <Nav/>
+
                     {children}
                 </Bg>
             </ThemeProviderWrapper>

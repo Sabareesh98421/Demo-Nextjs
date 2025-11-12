@@ -9,7 +9,7 @@ export function ThemeToggle()
     const {mode,toggleMode} = useThemeMode();
 
     return(
-        <div className="flex items-center justify-center w-full gap-2">
+        <div className="flex items-center justify-center gap-2 bg-transparent">
 
             <Brightness7
                 fontSize="small"

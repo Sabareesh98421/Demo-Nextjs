@@ -1,9 +1,9 @@
 "use client"
 import { LayoutTag} from "@/sharedUtils/CustomTypes";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import {useTheme} from "@mui/material";
-import React from "react";
+import React, {useEffect, useMemo, useState} from "react";
+import {Nav} from "@/components/Nav/Nav";
 
 export const frameworkColors = [
 
@@ -75,13 +75,26 @@ export const frameworkColors = [
 
 export function Bg({variant="section",children}:{variant:LayoutTag,children:React.ReactNode}){
     const theme = useTheme();
+    const [numTiles, setNumTiles] = useState(0);
+    useEffect(() => {
+        const calculateTiles = () => {
+            const cols:number = Math.ceil(window.innerWidth / 250);
+            const rows:number = Math.ceil(window.innerHeight / 160);
+            setNumTiles(cols * rows);
+        };
+
+        calculateTiles();
+        window.addEventListener("resize", calculateTiles);
+        return () => window.removeEventListener("resize", calculateTiles);
+    }, []);
+
     return(
         <Box component={variant} className="h-dvh w-dvw grid overflow-hidden grid-rows-5"  sx={{
             backgroundColor:theme.palette.background.default,
 
         }} >
 
-            <Box className="w-full h-full absolute grid"
+            <Box className="w-full h-screen absolute grid"
                 sx={{
                     inset: 0,
                     zIndex: 0,
@@ -104,48 +117,91 @@ export function Bg({variant="section",children}:{variant:LayoutTag,children:Reac
                     overflow: "hidden",
                 }}
             >
-                {frameworkColors.map((framework, index) => (
-                    <Box
-                        key={index}
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            transform: `rotate(${(index % 5 - 2) * 6}deg)`,
-                            opacity: 0.08 + (index % 5) * 0.04,
-                            width: "100%",
-                            height: "100%",
-                        }}
-                    >
-                           <span
-                               className={`font-extrabold select-none stroke-text ${framework.className}`}
-                               style={{
-                                   fontSize: "clamp(1.5rem, 3vw, 3.5rem)",
-                                   WebkitTextStroke: "1.5px",
-                                   paintOrder: "stroke fill",
-                                   whiteSpace: "nowrap",
-                               }}
-                           >
-                                {framework.word}
-                            </span>
-                    </Box>
-                ))}
+                {/*{frameworkColors.map((framework, index) => (*/}
+                {/*    <Box*/}
+                {/*        key={index}*/}
+                {/*        sx={{*/}
+                {/*            display: "flex",*/}
+                {/*            alignItems: "center",*/}
+                {/*            justifyContent: "center",*/}
+                {/*            transform: `rotate(${(index % 5 - 2) * 6}deg)`,*/}
+                {/*            opacity: 0.08 + (index % 5) * 0.04,*/}
+                {/*            width: "100%",*/}
+                {/*            height: "100%",*/}
+                {/*        }}*/}
+                {/*    >*/}
+                {/*           <span*/}
+                {/*               className={`font-extrabold select-none stroke-text ${framework.className}`}*/}
+                {/*               style={{*/}
+                {/*                   fontSize: "clamp(1.5rem, 3vw, 3.5rem)",*/}
+                {/*                   WebkitTextStroke: "1.5px",*/}
+                {/*                   paintOrder: "stroke fill",*/}
+                {/*                   whiteSpace: "nowrap",*/}
+                {/*               }}*/}
+                {/*           >*/}
+                {/*                {framework.word}*/}
+                {/*            </span>*/}
+                {/*    </Box>*/}
+                {/*))}*/}
+                <BackgroundTiles numTiles={numTiles}></BackgroundTiles>
+
             </Box>
 
 
-                <Box sx={{
+                <Box className="h-screen w-screen" sx={{
                     position: "absolute",
                     top: 0,
                     left: 0,
                     right: 0,
                     bottom: 0,
                     zIndex: 10,
-                    display: "grid",
+                    display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    gridAutoRows:"min-content",
+                    flexDirection:"column",
+                    py:"2rem",
+                    // gridAutoRows:"min-content",
                     p: { xs: 2, sm: 3, md: 4 },
-                }}>{children}</Box>
+                }}>
+                    <Nav/>
+                    {children}
+                </Box>
         </Box>
     )
+}
+
+function BackgroundTiles({numTiles}:{numTiles: number}){
+
+    return  useMemo(() => {
+        return Array.from({ length: numTiles })
+            .fill(null)
+            .map((_, i) => {
+                const f = frameworkColors[i % frameworkColors.length];
+                return (
+                    <Box
+                        key={i}
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transform: `rotate(${(i % 5 - 2) * 5}deg)`,
+                            opacity: 0.07 + (i % 4) * 0.04,
+                            animation: "floaty 20s ease-in-out infinite",
+                            animationDelay: `${i * 0.2}s`,
+                        }}
+                    >
+            <span
+                className={`font-extrabold select-none stroke-text ${f.className}`}
+                style={{
+                    fontSize: "clamp(1.8rem, 3vw, 3.5rem)",
+                    WebkitTextStroke: "1.2px",
+                    whiteSpace: "nowrap",
+                }}
+            >
+              {f.word}
+            </span>
+                    </Box>
+                );
+            });
+    }, [numTiles]);
 }

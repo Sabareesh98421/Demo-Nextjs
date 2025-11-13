@@ -23,7 +23,7 @@ const modes={
         secondary: { main: '#1976d2' },
         background: {
             default: '#121212',
-            paper: '#ffffff',
+            paper: '#333',
             primary: { main: '#9c27b0' },
             secondary: { main: '#1976d2' },
         },

@@ -104,3 +104,43 @@ export type FormHookReturns<T>={
     handleChange: (key: keyof T | string, value: unknown) => void;
     resetForm:ReturnVoidFunction;
 }
+export interface FrameworkInfo {
+    frameWork: string;
+    totalVotes: number;
+}
+export interface DashboardUser {
+    users: string[];
+}
+
+export interface DashboardData {
+    totalVotes: number;
+    users: DashboardUser[];
+    frameWork: FrameworkInfo[];
+}
+export enum IconName {
+    TotalVotes = "totalVotes",
+    People = "People",
+    Code = "Code",
+    TrendingUp = "TrendingUp",
+}
+export enum ColorName{
+    Primary= "primary",
+    Warning= "warning",
+    Success="success",
+    Error="error"
+}
+export interface DashboardCardProps {
+    label: string;
+    value: number;
+    iconName?: IconName;
+    color: ColorName;
+    image?: string;
+}
+
+export interface CardData {
+    label: string;
+    value: number;
+    iconName?: IconName;
+    color: ColorName;
+    image?:string;
+}

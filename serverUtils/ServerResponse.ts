@@ -1,6 +1,14 @@
 import {NextResponse} from "next/server";
 import {ResponseGeneratorParam} from "@/sharedUtils/CustomTypes";
+export function responseCarrier<T=unknown>({status = 200, message = "ok", data= null}:ResponseGeneratorParam<T>){
+    if(data){
+        return {message,data,status}
+    }
+    return {
+        message,status
+    }
 
+}
 
 export function serverResponse<T=unknown>({status = 200, message = "ok", data= null}:ResponseGeneratorParam<T>){
     if(data){
@@ -10,9 +18,9 @@ export function serverResponse<T=unknown>({status = 200, message = "ok", data= n
 
 }
 
-export function redirect(path:URL|string)
+export function redirect(path:string,reqUrl:string)
 {
-       return  NextResponse.redirect(path);
+       return  NextResponse.redirect(new URL(path,reqUrl));
 }
 export function next(){
     return NextResponse.next()

@@ -8,6 +8,7 @@ const defaultVotes: VoteData = {
     "Next": { emails: [], totalVotes: 0 },
     "Nuxt": { emails: [], totalVotes: 0 },
     "Angular": { emails: [], totalVotes: 0 },
+    "Nest": { emails: [], totalVotes: 0 },
 };
 // per instance for per db/json file
 const fs = new FilesHandling("votes.json")
@@ -17,6 +18,7 @@ export async function POST(req: Request) {
     try {
         await fs.ensureDataFile<VoteData>(defaultVotes);
         const { email, frameWork } = await req.json();
+        console.log(req.json())
         if (!frameWork || !email) {
             return res.json({ message: "Missing FrameWork or email" }, { status: 400 })
         }

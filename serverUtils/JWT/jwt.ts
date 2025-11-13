@@ -1,5 +1,5 @@
-import jwt, {Secret} from "jsonwebtoken";
-import {serverResponse} from "@/serverUtils/ServerResponse";
+import jwt, {JwtPayload, Secret} from "jsonwebtoken";
+import {responseCarrier} from "@/serverUtils/ServerResponse";
 import {Role} from "@/sharedUtils/CustomTypes";
 
 const secretKey:Secret = process.env.SECRET_KEY!;
@@ -9,19 +9,19 @@ export function createJWT(email:string,role:Role){
 }
 export function parseJWT(token:string){
     try {
-        jwt.verify(token, secretKey);
-        return serverResponse({message:"Token Verified successfully",status:200})
+        const decoded: JwtPayload = jwt.verify(token, secretKey) as JwtPayload;
+        return responseCarrier<JwtPayload>({message:"Token Verified successfully",status:200,data:decoded})
 
     }
     catch(err:unknown){
         if(err instanceof  jwt.JsonWebTokenError){
-          return   serverResponse({message:"Token corrupted ",status:401})
+          return   responseCarrier({message:"Token corrupted ",status:401})
         }
         if(err instanceof  jwt.TokenExpiredError){
-            return  serverResponse({message:"Token Expired long ago 🤣🤣🤣.....",status:403})
+            return  responseCarrier({message:"Token Expired long ago 🤣🤣🤣.....",status:403})
         }
         // NotBeforeError-Token timing related need to check.
-        return serverResponse({ message: "Invalid token timing 🕐", status: 400 });
+        return responseCarrier({ message: "Invalid token timing 🕐", status: 400 });
     }
 
 }

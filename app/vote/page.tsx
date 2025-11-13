@@ -16,10 +16,6 @@ const GLOBAL_TIMING = 3000;
 export default function Vote() {
     const router:AppRouterInstance = useRouter();
     const [feedback, setFeedBack] = useState<FeedbackType>(null);
-    useEffect(() => {
-        const token = localStorage.getItem("authToken");
-        if (!token) router.push("/signIn")
-    }, [router]);
 
     const clearFeedback = useCallback(() => {
         setFeedBack(null);

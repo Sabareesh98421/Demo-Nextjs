@@ -117,32 +117,7 @@ export function Bg({variant="section",children}:{variant:LayoutTag,children:Reac
                     overflow: "hidden",
                 }}
             >
-                {/*{frameworkColors.map((framework, index) => (*/}
-                {/*    <Box*/}
-                {/*        key={index}*/}
-                {/*        sx={{*/}
-                {/*            display: "flex",*/}
-                {/*            alignItems: "center",*/}
-                {/*            justifyContent: "center",*/}
-                {/*            transform: `rotate(${(index % 5 - 2) * 6}deg)`,*/}
-                {/*            opacity: 0.08 + (index % 5) * 0.04,*/}
-                {/*            width: "100%",*/}
-                {/*            height: "100%",*/}
-                {/*        }}*/}
-                {/*    >*/}
-                {/*           <span*/}
-                {/*               className={`font-extrabold select-none stroke-text ${framework.className}`}*/}
-                {/*               style={{*/}
-                {/*                   fontSize: "clamp(1.5rem, 3vw, 3.5rem)",*/}
-                {/*                   WebkitTextStroke: "1.5px",*/}
-                {/*                   paintOrder: "stroke fill",*/}
-                {/*                   whiteSpace: "nowrap",*/}
-                {/*               }}*/}
-                {/*           >*/}
-                {/*                {framework.word}*/}
-                {/*            </span>*/}
-                {/*    </Box>*/}
-                {/*))}*/}
+
                 <BackgroundTiles numTiles={numTiles}></BackgroundTiles>
 
             </Box>

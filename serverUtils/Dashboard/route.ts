@@ -4,9 +4,14 @@ const fs = new FilesHandling("votes.json");
 export async function dashBoardStats(){
        await fs.ensureDataFile()
         const votes:VoteData= await fs.readDataJson<VoteData>();
-        totalEntierVote(votes); // component = DashboardComponent
-        whichUserNFrameWork(votes);
-        whichFrameWorkNItTotal(votes) // component = DashboardComponent
+    return {
+        totalVotes: totalEntierVote(votes),
+        users: whichUserNFrameWork(votes),
+        frameWork: whichFrameWorkNItTotal(votes).map(f => ({
+            frameWork: f.frameWork,
+            totalVotes: f.totalVotes.totalVotes,
+        })),
+    };
 }
 
 function totalEntierVote(votes:VoteData){

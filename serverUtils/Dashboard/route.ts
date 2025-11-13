@@ -1,11 +1,12 @@
 import {FilesHandling} from "@/serverUtils/fileHandling";
 import {FrameworkData, VoteData} from "@/sharedUtils/CustomTypes";
 const fs = new FilesHandling("votes.json");
-export async function GET(){
+export async function dashBoardStats(){
        await fs.ensureDataFile()
         const votes:VoteData= await fs.readDataJson<VoteData>();
-        totalEntierVote(votes);
+        totalEntierVote(votes); // component = DashboardComponent
         whichUserNFrameWork(votes);
+        whichFrameWorkNItTotal(votes) // component = DashboardComponent
 }
 
 function totalEntierVote(votes:VoteData){
@@ -14,5 +15,10 @@ function totalEntierVote(votes:VoteData){
 function whichUserNFrameWork(votes:VoteData){
     return Object.entries(votes).map(([frameWork,data])=>({
         frameWork,users:data.emails
+    }))
+}
+function whichFrameWorkNItTotal(votes:VoteData){
+    return Object.entries(votes).map(([frameWork,totalVotes])=>({
+        frameWork,totalVotes
     }))
 }

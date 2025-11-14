@@ -1,16 +1,18 @@
 import jwt, {JwtPayload, Secret} from "jsonwebtoken";
 import {responseCarrier} from "@/serverUtils/ServerResponse";
-import {Role} from "@/sharedUtils/CustomTypes";
+import {Role, ServerJwtPayload} from "@/sharedUtils/CustomTypes";
 
-const secretKey:Secret = process.env.SECRET_KEY!;
-
+const secretKey:Secret|null = process.env.SECRET_KEY ?? null;
+if(!secretKey){
+    throw new ReferenceError("There Is no Secret key for the JWT , that I can secure please creat a .env file if it's doesn't exist")
+}
 export function createJWT(email:string,role:Role){
-    return jwt.sign({email,role}, secretKey, {expiresIn: "2h"});
+    return jwt.sign({email,role},( secretKey as Secret), {algorithm:"HS512",expiresIn: "2h"});
 }
 export function parseJWT(token:string){
     try {
-        const decoded: JwtPayload = jwt.verify(token, secretKey) as JwtPayload;
-        return responseCarrier<JwtPayload>({message:"Token Verified successfully",status:200,data:decoded})
+        const decoded: ServerJwtPayload = jwt.verify(token, (secretKey as Secret)) as ServerJwtPayload;
+        return responseCarrier<ServerJwtPayload>({message:"Token Verified successfully",status:200,data:decoded})
 
     }
     catch(err:unknown){

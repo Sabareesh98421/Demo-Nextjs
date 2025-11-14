@@ -4,10 +4,10 @@ import "./globals.css";
 import {AppRouterCacheProvider} from "@mui/material-nextjs/v13-appRouter";
 import ReduxStoreProvider from "@/lib/Provider/reduxStoreProvider"
 import {Bg} from "@/components/Background/Bg";
-
-import ThemeProviderWrapper from "@/components/themeProvider/ThemeProvider";
-import React from "react";
 import {Nav} from "@/components/Nav/Nav";
+import ThemeProviderWrapper from "@/components/themeProvider/ThemeProvider";
+
+import React from "react";
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
 //   subsets: ["latin"],
@@ -37,8 +37,8 @@ export default function RootLayout({
 
         <ReduxStoreProvider>
             <ThemeProviderWrapper>
+                    <Nav/>
                 <Bg variant="section">
-
                     {children}
                 </Bg>
             </ThemeProviderWrapper>

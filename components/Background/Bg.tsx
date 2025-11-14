@@ -135,10 +135,11 @@ export function Bg({variant="section",children}:{variant:LayoutTag,children:Reac
                     alignItems: "center",
                     flexDirection:"column",
                     py:"2rem",
+                    m:1,
                     // gridAutoRows:"min-content",
                     p: { xs: 2, sm: 3, md: 4 },
                 }}>
-                    <Nav/>
+
                     {children}
                 </Box>
         </Box>

@@ -1,4 +1,11 @@
 // CustomTypes.ts
+import {JwtPayload} from "jsonwebtoken";
+export interface ServerJwtPayload extends JwtPayload {
+    email: string;
+    role: string;
+}
+
+
 export interface SignUpFormData{
    email:string,
    password:string,

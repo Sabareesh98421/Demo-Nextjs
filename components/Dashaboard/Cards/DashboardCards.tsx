@@ -24,7 +24,7 @@ export default function DashboardCard({ label, value, iconName, color, image }: 
     return (
         <Paper
             elevation={3}
-            className="flex justify-between items-center p-6 rounded-xl transform transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg gap-2 flex-1 min-w-[200px]"
+            className="flex justify-evenly items-center p-6 rounded-xl transform transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg gap-2 flex-1 min-w-[200px]"
             sx={{
                 borderLeft: 5,
                 borderColor: (theme) => theme.palette[color].main,

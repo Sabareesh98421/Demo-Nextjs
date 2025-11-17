@@ -1,4 +1,11 @@
-import type {DashboardData, CardData, IconName, ColorName} from "@/sharedUtils/CustomTypes";
+import type {
+    DashboardData,
+    CardData,
+    IconName,
+    DashboardStats,
+    FrameWorkNItTotal, DashboardChartData
+} from "@/sharedUtils/CustomTypes";
+import {ColorName} from "@/sharedUtils/CustomTypes";
 type IconColorMap = Record<
     "totalVotes" | "totalUsers" ,
     { iconName: IconName; color: ColorName }
@@ -15,4 +22,26 @@ export function getDashboardCardsData(dashboardData: DashboardData, iconColorMap
 
 
     ];
+}
+
+export function getFrameWorkCard(dashboardStats:DashboardStats){
+
+return dashboardStats.frameWork.map((frameworkData:FrameWorkNItTotal) => ({
+    label: frameworkData.frameWork,
+    value: frameworkData.totalVotes,
+    color: ColorName.Primary,
+    image: `/${frameworkData.frameWork}.png`,
+}));
+}
+
+export function getChartData(frameWork:FrameWorkNItTotal[]):DashboardChartData{
+
+return frameWork.reduce<DashboardChartData>(
+    ([labels, votes],frameWorkData:FrameWorkNItTotal) => {
+        labels.push(frameWorkData.frameWork);
+        votes.push(frameWorkData.totalVotes);
+        return [labels, votes];
+    },
+    [[], []]
+);
 }

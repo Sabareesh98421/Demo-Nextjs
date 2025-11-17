@@ -3,6 +3,7 @@ import {configureStore} from "@reduxjs/toolkit";
 import countSlicer from "@/features/CounterSlice/counterSlice";
 import RegisterUserSlice from "@/features/userSlice/Register/RegisterUser";
 import {AppAPI} from "@/features/RTK/CreateAPI/DefineAppApi";
+import DialogSlice from "@/features/DialogSlice/DialogSlice";
 
 
 export function demoStore(){
@@ -12,6 +13,7 @@ export function demoStore(){
                 [AppAPI.reducerPath]:AppAPI.reducer,
                 counter:countSlicer,
                 Register:RegisterUserSlice,
+                DialogBox:DialogSlice
                 // userData:userSlicer
             },
         middleware:(getDefaultMiddleware)=>getDefaultMiddleware().concat(AppAPI.middleware)

@@ -7,6 +7,7 @@ const modes={
     light: {
         primary: { main: '#1976d2' },
         secondary: { main: '#9c27b0' },
+
         background: {
             default: '#f5f5f5',
             paper: '#ffffff',
@@ -26,6 +27,7 @@ const modes={
             paper: '#333',
             primary: { main: '#9c27b0' },
             secondary: { main: '#1976d2' },
+
         },
         text: {
             primary: '#ffffff',

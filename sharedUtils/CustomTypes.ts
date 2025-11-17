@@ -53,17 +53,45 @@ export interface ServerResponse{
 export interface ServerResponseWithData<T> extends ServerResponse{
     data:T
 }
+
 export type TInputType = "email"
     | "number"
     | "text"
     | "password"
     | "phoneNumber"
-    | "radio";
+    | "radio"
+    |"file"
+    ;
 
-
+export enum InputTypeSTypeChecker{
+    Number = "number" ,
+    String = "string",
+    Email = "email",
+    Password = "password",
+    PhoneNumber = "phoneNumber",
+    Radio = "radio",
+    File = "file"
+}
+export interface FormStruct<T extends Record<string, unknown>>{
+    title:string,
+    form:T,
+    fields:FormField[],
+    ButtonAction:ButtonActionType;
+}
 export type TInpValue = {
     name: string,
     value: string
+}
+export enum ButtonActionType{
+    Add="Add",
+    Edit="Edit"
+}
+export interface FormField {
+    name: string;
+    label: string;
+    type: TInputType;
+    value?:string;
+
 }
 
 
@@ -136,6 +164,7 @@ export enum ColorName{
     Success="success",
     Error="error"
 }
+export type DashboardChartData = [string[], number[]];
 export interface DashboardCardProps {
     label: string;
     value: number;
@@ -150,4 +179,21 @@ export interface CardData {
     iconName?: IconName;
     color: ColorName;
     image?:string;
+}
+export interface UserNVotes{
+    users: string[];
+    frameWork: string;
+}
+export interface FrameWorkNItTotal {
+    frameWork: string;
+    totalVotes: number;
+}
+export interface DashboardStats{
+    totalVotes: number;
+    users:UserNVotes[];
+    frameWork:FrameWorkNItTotal[];
+}
+export interface AddCandidate{
+    frameWork: string;
+    file?:File|null
 }

@@ -1,12 +1,12 @@
-import DashboardCard from "@/components/Dashaboard/Cards/DashboardCards";
+import DashboardCard from "@/components/AdminComponents/Dashboard/Cards/DashboardCards";
 import { dashBoardStats } from "@/serverUtils/Dashboard/route";
-import { getDashboardCardsData } from "@/serverUtils/Dashboard/dashboardUtils";
+import {getChartData, getDashboardCardsData, getFrameWorkCard} from "@/serverUtils/Dashboard/dashboardUtils";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import { CardData, ColorName, IconName } from "@/sharedUtils/CustomTypes";
-import DashboardChart from "@/components/Dashaboard/statsGraph/Chart";
+import {CardData, ColorName, DashboardStats, IconName,DashboardChartData} from "@/sharedUtils/CustomTypes";
+import DashboardChart from "@/components/AdminComponents/Dashboard/statsGraph/Chart";
+import CandidatesActionList from "@/components/AdminComponents/Dashboard/PoolingCandidatesActionList/candidateActions";
 
-type ChartData = [string[], number[]];
 
 const ICON_COLOR_MAP = {
     totalVotes: { iconName: IconName.TotalVotes, color: ColorName.Primary },
@@ -14,30 +14,15 @@ const ICON_COLOR_MAP = {
 };
 
 export default async function Dashboard() {
-    const dashboardStats = await dashBoardStats();
-
+    const dashboardStats:DashboardStats = await dashBoardStats();
+    const frameworkCards: CardData[] = getFrameWorkCard(dashboardStats);
+    const [chartLabels, chartData]: DashboardChartData = getChartData(dashboardStats.frameWork);
     const statisticsCards: CardData[] = getDashboardCardsData(dashboardStats, ICON_COLOR_MAP);
 
-    const frameworkCards: CardData[] = dashboardStats.frameWork.map((frameworkData) => ({
-        label: frameworkData.frameWork,
-        value: frameworkData.totalVotes,
-        color: ColorName.Primary,
-        image: `/${frameworkData.frameWork}.png`,
-    }));
-    console.log(frameworkCards);
-    const [chartLabels, chartData]: ChartData = dashboardStats.frameWork.reduce(
-        ([labels, votes]: ChartData, frameworkData) => {
-            labels.push(frameworkData.frameWork);
-            votes.push(frameworkData.totalVotes);
-            return [labels, votes];
-        },
-        [[], []]
-    );
-
     return (
-        <Stack className="w-full overflow-y-auto">
+        <Stack className="w-full overflow-y-auto p-6 gap-6">
             <Box
-                className="p-6 flex flex-wrap justify-center gap-6 "
+                className="flex flex-wrap justify-center gap-6 "
             >
 
             {statisticsCards.map((card) => (
@@ -51,7 +36,7 @@ export default async function Dashboard() {
                 ))}
             </Box>
 
-            <Box className="p-6 flex flex-wrap gap-6 mt-6">
+            <Box className=" flex flex-wrap gap-6 mt-6">
                 {frameworkCards.map((card) => (
                     <DashboardCard
                         key={card.label}
@@ -63,7 +48,16 @@ export default async function Dashboard() {
                 ))}
             </Box>
 
-            <DashboardChart labels={chartLabels} data={chartData} />
+            <Box className="flex flex-wrap gap-6">
+                <CandidatesActionList
+                frameworks={frameworkCards.map(f => ({
+                    frameWork: f.label,
+                    image: f.label!
+                }))}
+            />
+
+            </Box>
+                <DashboardChart labels={chartLabels} data={chartData}/>
         </Stack>
     );
 }

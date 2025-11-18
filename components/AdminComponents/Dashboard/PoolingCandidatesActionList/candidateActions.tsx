@@ -15,24 +15,38 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import {useTheme} from "@mui/material";
-import {addCandidates, useDialogBoxHandler} from "@/components/Component.Hooks/DialogBoxHandler";
+import {addCandidates, editCandidateDialog, useDialogBoxHandler} from "@/components/Component.Hooks/DialogBoxHandler";
 import DialogBox from "@/components/DialogBox/DialogBox";
+import {DialogFormStruct, DialogGlobalState, FormUIStruct, InputTypeSType} from "@/sharedUtils/CustomTypes";
 
 interface FrameworkRow {
     frameWork: string;
     image?: string;
 }
 
+const fields:FormUIStruct[]=[
+    {
+        name:"FrameWork",
+        type:InputTypeSType.Text,
+        id:"a1",
+        label:"FrameWork Name",
+
+    }
+]
+
 export default function CandidatesActionList({ frameworks }: { frameworks: FrameworkRow[] }) {
     const theme = useTheme();
-    const {handleOpenDialog}=useDialogBoxHandler()
+    const {handleOpenDialog}=useDialogBoxHandler<DialogFormStruct>()
     const handleAddCandidate=()=>{
         handleOpenDialog(addCandidates)
     }
     const handleDelete = (frameworkName: string) => {
         console.log("DELETE →", frameworkName);
     };
-
+    const handleEditCandidate=(frameWorkName:string)=>{
+        const editFramework:DialogGlobalState = editCandidateDialog();
+        handleOpenDialog(editFramework)
+    }
     return (
         <Paper sx={{ width: "100%", mt: 4, p: 3 }}>
             <Box className="flex justify-between items-center  " sx={{
@@ -49,7 +63,7 @@ export default function CandidatesActionList({ frameworks }: { frameworks: Frame
                 >
                     Add Candidate
                 </Button>
-                <DialogBox></DialogBox>
+                <DialogBox fields={fields}></DialogBox>
             </Box>
             <TableContainer>
                 <Table>
@@ -79,7 +93,7 @@ export default function CandidatesActionList({ frameworks }: { frameworks: Frame
 
                                 <TableCell align="right">
                                     <IconButton color="primary">
-                                        <EditIcon />
+                                        <EditIcon onClick={()=>handleEditCandidate(candidate.frameWork)} />
                                     </IconButton>
 
                                     <IconButton

@@ -1,19 +1,21 @@
 "use client";
-import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, IconButton } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, IconButton, FormControl,Box,FormLabel } from "@mui/material";
 import {useDialogBoxHandler} from "@/components/Component.Hooks/DialogBoxHandler";
-import { InputTypeSTypeChecker } from "@/sharedUtils/CustomTypes";
+import { InputTypeSType,FormUIStruct} from "@/sharedUtils/CustomTypes";
 import CloseIcon from '@mui/icons-material/Close';
+import {HTTP_Method} from "@/serverUtils/Enums/HTTP_Enum";
+import {useForm} from "@/CustomHooks/useForm";
 
-export default function DialogBox() {
-    const { open, title, form,fields, handleChange, handleClose, handleSubmit,buttonAction } = useDialogBoxHandler();
-
+export default function DialogBox<T extends FormUIStruct>({fields}:{fields:T[]}) {
+    const { open, title, handleClose,buttonAction } = useDialogBoxHandler();
+    // const {} = useForm();
+    const handleSubmit=()=>{};
+    const handleChange=(name:string,value:File|string|null)=>{};
     return (
-        <Dialog open={open} onClose={handleClose}>
-            <form onSubmit={handleSubmit}>
-                <DialogTitle sx={{ position: "relative", pr: 5 }}>
+        <Dialog open={open} onClose={handleClose}  className="flex justify-center items-center h-full w-full">
+            <FormControl component="form" method={HTTP_Method.POST} onSubmit={handleSubmit}  className="flex flex-col w-full p-4" >
+                <DialogTitle sx={{ position: "relative", p: 3 }}>
                     {title}
-
-
                     <IconButton
                         onClick={handleClose}
                         sx={{
@@ -25,11 +27,11 @@ export default function DialogBox() {
                         <CloseIcon />
                     </IconButton>
                 </DialogTitle>
-                <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2 ,height:"65%" ,width:"100%"}}>
                     {fields.map(field =>
-                        field.type === InputTypeSTypeChecker.File ? (
+                        field.type === InputTypeSType.File ? (
                             <Button key={field.name} component="label" variant="outlined">
-                                {form?.[field.name] ? "Change File" : field.label}
+                                { field.name ? "Change File" : field.label}
                                 <input
                                     type="file"
                                     hidden
@@ -39,13 +41,17 @@ export default function DialogBox() {
                                 />
                             </Button>
                         ) : (
-                            <TextField
+
+                            <Box key={field.name} sx={{ display:"flex",flexGrow: 1 ,gap:2,flexWrap:"wrap",justifyContent: "space-between" ,alignItems:"center"}}>
+                                <FormLabel>
+                                    {field.label} <span className="text-red-500">*</span>
+                                </FormLabel>
+                                <TextField
                                 key={field.name}
-                                label={field.label}
-                                value={(form?.[field.name] as string) ?? ""}
+                                // value=""//{field.name}
                                 onChange={(e) => handleChange(field.name, e.target.value)}
                                 required={field.required ?? false}
-                            />
+                            /></Box>
                         )
                     )}
 
@@ -54,7 +60,7 @@ export default function DialogBox() {
                 <DialogActions>
                     <Button type="submit" variant="contained">{buttonAction}</Button>
                 </DialogActions>
-            </form>
+            </FormControl>
         </Dialog>
     );
 }

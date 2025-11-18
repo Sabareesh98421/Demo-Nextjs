@@ -1,13 +1,8 @@
 import {v4 as uuidv4} from "uuid";
 import {FilesHandling} from "@/serverUtils/fileHandling";
 import {serverResponse} from "@/serverUtils/ServerResponse";
-interface Candidates {
-    id:string;
-    name:string;
-}
-interface NewCandidate{
-    name:string
-}
+import {Candidates, NewCandidate} from "@/sharedUtils/CustomTypes";
+
 const fs = new FilesHandling("candidates.json");
 export async function POST(req:Request){
     try{

@@ -1,20 +1,23 @@
 // CustomTypes.ts
 import {JwtPayload} from "jsonwebtoken";
-export interface ServerJwtPayload extends JwtPayload {
-    email: string;
-    role: string;
-}
 
+export interface FormUIStruct {
+    label:string;
+    id: string;
+    name: string;
+    type:InputTypeSType;
+    value?:string;
+    className?:string;
+    onChange?:()=>void;
+    required?:boolean;
+}
 
 export interface SignUpFormData{
    email:string,
    password:string,
    confirmPassword:string
 }
-export enum Role{
-    Admin="Admin",
-    User = "User"
-}
+
 // Define the structure of your mock data file
 export type FrameworkData = {
     emails: string[];
@@ -22,37 +25,9 @@ export type FrameworkData = {
 }
 export type VoteData = Record<string, FrameworkData>;
 
-export interface UserData{
-    email:string,
-    password:string,
-    role: Role
-}
-export type SignUpResponse = {
-    status: number;
-    message: string;
-};
-
-export interface ResponseGeneratorParam<T=unknown>{
-    status?:number,
-    message?:string,
-    data?:T|null
-}
 
 export type LoginFormData = UserData;
 
-
-
-export interface LoginResponse{
-    status:number,
-    message:string
-}
-export interface ServerResponse{
-    status:number,
-    message:string
-}
-export interface ServerResponseWithData<T> extends ServerResponse{
-    data:T
-}
 
 export type TInputType = "email"
     | "number"
@@ -63,14 +38,23 @@ export type TInputType = "email"
     |"file"
     ;
 
-export enum InputTypeSTypeChecker{
+export enum InputTypeSType{
     Number = "number" ,
-    String = "string",
+    Text = "text",
     Email = "email",
     Password = "password",
     PhoneNumber = "phoneNumber",
     Radio = "radio",
     File = "file"
+}
+export interface DialogFormStruct  extends  Record<string, unknown>{
+    frameWork:string,
+    image?:File|null,
+}
+
+export interface DialogGlobalState{
+    title:string;
+    buttonAction:ButtonActionType;
 }
 export interface FormStruct<T extends Record<string, unknown>>{
     title:string,
@@ -138,6 +122,54 @@ export type FormHookReturns<T>={
     finalFormData: T;
     handleChange: (key: keyof T | string, value: unknown) => void;
     resetForm:ReturnVoidFunction;
+}
+// Server side Types.....
+
+export interface ServerJwtPayload extends JwtPayload {
+    email: string;
+    role: string;
+}
+
+export enum Role{
+    Admin="Admin",
+    User = "User"
+}
+export interface UserData{
+    email:string,
+    password:string,
+    role: Role
+}
+export type SignUpResponse = {
+    status: number;
+    message: string;
+};
+
+export interface ResponseGeneratorParam<T=unknown>{
+    status?:number,
+    message?:string,
+    data?:T|null
+}
+
+
+
+export interface LoginResponse{
+    status:number,
+    message:string
+}
+export interface ServerResponse{
+    status:number,
+    message:string
+}
+export interface ServerResponseWithData<T> extends ServerResponse{
+    data:T
+}
+
+export interface Candidates {
+    id:string;
+    name:string;
+}
+export interface NewCandidate{
+    name:string
 }
 export interface FrameworkInfo {
     frameWork: string;

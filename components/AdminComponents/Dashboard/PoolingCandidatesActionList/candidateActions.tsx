@@ -15,36 +15,28 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import {useTheme} from "@mui/material";
-import {addCandidates, editCandidateDialog, useDialogBoxHandler} from "@/components/Component.Hooks/DialogBoxHandler";
+import {addCandidates, DialogFormFields, editCandidateDialog, useDialogBoxHandler} from "@/components/Component.Hooks/DialogBoxHandler";
 import DialogBox from "@/components/DialogBox/DialogBox";
-import {DialogFormStruct, DialogGlobalState, FormUIStruct, InputTypeSType} from "@/sharedUtils/CustomTypes";
+import {ButtonActionType, DialogFormStruct, DialogGlobalState, Framework} from "@/sharedUtils/CustomTypes";
+import {useState} from "react";
 
-interface FrameworkRow {
-    frameWork: string;
-    image?: string;
-}
 
-const fields:FormUIStruct[]=[
-    {
-        name:"FrameWork",
-        type:InputTypeSType.Text,
-        id:"a1",
-        label:"FrameWork Name",
+const fields= DialogFormFields
 
-    }
-]
 
-export default function CandidatesActionList({ frameworks }: { frameworks: FrameworkRow[] }) {
+export default function CandidatesActionList({ frameworks }: { frameworks: Framework[] }) {
     const theme = useTheme();
-    const {handleOpenDialog}=useDialogBoxHandler<DialogFormStruct>()
+
+    const {handleOpenDialog,buttonAction,value,id}=useDialogBoxHandler<DialogFormStruct>()
     const handleAddCandidate=()=>{
         handleOpenDialog(addCandidates)
     }
     const handleDelete = (frameworkName: string) => {
         console.log("DELETE →", frameworkName);
     };
-    const handleEditCandidate=(frameWorkName:string)=>{
-        const editFramework:DialogGlobalState = editCandidateDialog();
+    const handleEditCandidate=(frameWorkName:string,candidateId:string)=>{
+
+        const editFramework:DialogGlobalState = editCandidateDialog(frameWorkName,candidateId);
         handleOpenDialog(editFramework)
     }
     return (
@@ -52,7 +44,6 @@ export default function CandidatesActionList({ frameworks }: { frameworks: Frame
             <Box className="flex justify-between items-center  " sx={{
                 bgcolor:theme.palette.background.default,
                 p:2,
-
             }} >
                 <Typography  variant="h2" sx={{fontSize:16,fontWeight:"Bold"}}>Candidates List</Typography>
 
@@ -63,7 +54,7 @@ export default function CandidatesActionList({ frameworks }: { frameworks: Frame
                 >
                     Add Candidate
                 </Button>
-                <DialogBox fields={fields}></DialogBox>
+                <DialogBox fields={fields()}></DialogBox>
             </Box>
             <TableContainer>
                 <Table>
@@ -74,31 +65,28 @@ export default function CandidatesActionList({ frameworks }: { frameworks: Frame
                             <TableCell align="right">Actions</TableCell>
                         </TableRow>
                     </TableHead>
-
                     <TableBody>
                         {frameworks.map((candidate) => (
-                            <TableRow key={candidate.frameWork}>
-                                {candidate.image && (<TableCell>
-
+                            <TableRow key={candidate.name}>
+                                {candidate.logo && (<TableCell>
                                     <Image
-                                        src={`/${candidate.image}.png`}
-                                        alt={candidate.frameWork}
+                                        src={`${candidate.logo}`}
+                                        alt={candidate.name}
                                         width={40}
                                         height={40}
                                         unoptimized
                                     />
                                 </TableCell>)}
 
-                                <TableCell>{candidate.frameWork}</TableCell>
+                                <TableCell>{candidate.name}</TableCell>
 
                                 <TableCell align="right">
                                     <IconButton color="primary">
-                                        <EditIcon onClick={()=>handleEditCandidate(candidate.frameWork)} />
+                                        <EditIcon onClick={()=>handleEditCandidate(candidate.name,candidate.id)} />
                                     </IconButton>
-
                                     <IconButton
                                         color="error"
-                                        onClick={() => handleDelete(candidate.frameWork)}
+                                        onClick={() => handleDelete(candidate.name)}
                                     >
                                         <DeleteForeverIcon />
                                     </IconButton>
@@ -108,7 +96,6 @@ export default function CandidatesActionList({ frameworks }: { frameworks: Frame
                     </TableBody>
                 </Table>
             </TableContainer>
-
         </Paper>
     );
 }

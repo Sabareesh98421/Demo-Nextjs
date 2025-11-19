@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack";
 import {CardData, ColorName, DashboardStats, IconName,DashboardChartData} from "@/sharedUtils/CustomTypes";
 import DashboardChart from "@/components/AdminComponents/Dashboard/statsGraph/Chart";
 import CandidatesActionList from "@/components/AdminComponents/Dashboard/PoolingCandidatesActionList/candidateActions";
+import {getCandidate} from "@/serverUtils/Dashboard/GetCandidate";
 
 
 const ICON_COLOR_MAP = {
@@ -15,6 +16,7 @@ const ICON_COLOR_MAP = {
 
 export default async function Dashboard() {
     const dashboardStats:DashboardStats = await dashBoardStats();
+    const fraworkList = await getCandidate();
     const frameworkCards: CardData[] = getFrameWorkCard(dashboardStats);
     const [chartLabels, chartData]: DashboardChartData = getChartData(dashboardStats.frameWork);
     const statisticsCards: CardData[] = getDashboardCardsData(dashboardStats, ICON_COLOR_MAP);
@@ -50,9 +52,10 @@ export default async function Dashboard() {
 
             <Box className="flex flex-wrap gap-6">
                 <CandidatesActionList
-                frameworks={frameworkCards.map(f => ({
-                    frameWork: f.label,
-                    image: f.label!
+                frameworks={fraworkList.map(f => ({
+                    id:f.id,
+                    name: f.name,
+                    logo: f.logo!
                 }))}
             />
 

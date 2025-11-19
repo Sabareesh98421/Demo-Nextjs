@@ -10,6 +10,10 @@ type IconColorMap = Record<
     "totalVotes" | "totalUsers" ,
     { iconName: IconName; color: ColorName }
 >;
+
+
+
+
 export function getDashboardCardsData(dashboardData: DashboardData, iconColorMap:IconColorMap): CardData[] {
     const totalVotes = dashboardData.totalVotes;
     const totalUsers = dashboardData.users.reduce((sum, u) => sum + u.users.length, 0);

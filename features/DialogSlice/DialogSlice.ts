@@ -4,16 +4,22 @@ import {ButtonActionType} from "@/sharedUtils/CustomTypes";
 interface DialogSlice{
     open:boolean;
     title:string;
-    buttonAction:ButtonActionType
+    buttonAction:ButtonActionType;
+    value?:string|null;
+    id?:string|null
 }
 interface OpenDialogPayload {
     title: string;
     buttonAction:ButtonActionType;
+    value?:string|null;
+    id?:string|null
 }
 const initialState: DialogSlice = {
     open:false,
     title:"",
-    buttonAction:ButtonActionType.Add
+    buttonAction:ButtonActionType.Add,
+    value:"",
+    id:"",
 }
 const DialogBoxSlice = createSlice({
     name:"DialogBox",
@@ -23,6 +29,8 @@ const DialogBoxSlice = createSlice({
             state.open = true;
             state.title = action.payload.title;
             state.buttonAction = action.payload.buttonAction;
+            state.value = state.buttonAction===ButtonActionType.Edit?action.payload.value:null;
+            state.id=state.buttonAction===ButtonActionType.Edit?action.payload.id:null;
         },
         closeDialog(state:any){
             Object.assign(state,initialState);

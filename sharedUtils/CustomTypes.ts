@@ -55,6 +55,8 @@ export interface DialogFormStruct  extends  Record<string, unknown>{
 export interface DialogGlobalState{
     title:string;
     buttonAction:ButtonActionType;
+    value?:string|null
+    id?:string|null
 }
 export interface FormStruct<T extends Record<string, unknown>>{
     title:string,
@@ -105,7 +107,7 @@ export type FeedbackType = { text: string, type: 'success' | 'error' } | null
 // export type CB_Void =(param:unknown)=>void
 
 
-export type ReturnVoidFunction =()=>void;
+export type ReturnVoidFunction =(arg?:any)=>void;
 
 
 export type ErrorMessage=string[]|null;
@@ -122,6 +124,12 @@ export type FormHookReturns<T>={
     finalFormData: T;
     handleChange: (key: keyof T | string, value: unknown) => void;
     resetForm:ReturnVoidFunction;
+}
+
+export interface Framework {
+    id:string;
+    name: string;
+    logo?: string;
 }
 // Server side Types.....
 
@@ -167,9 +175,11 @@ export interface ServerResponseWithData<T> extends ServerResponse{
 export interface Candidates {
     id:string;
     name:string;
+    logo?:string|null
 }
 export interface NewCandidate{
     name:string
+    logo?:Candidates["logo"],
 }
 export interface FrameworkInfo {
     frameWork: string;

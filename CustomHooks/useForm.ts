@@ -7,8 +7,11 @@ export function useForm<T extends Form>(formData:T):FormHookReturns<T>{
     function handleChange(key:keyof T,value:unknown){
         setFinalFormData((prev)=>({...prev,[key]:value}))
     }
-    function resetForm(){
-       return  setFinalFormData(formData);
+    function resetForm(newData?: Partial<T>) {
+        setFinalFormData((prev) => ({
+            ...prev,
+            ...newData,
+        }));
     }
     return {finalFormData,handleChange,resetForm};
 }

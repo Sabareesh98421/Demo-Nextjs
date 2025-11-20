@@ -28,8 +28,10 @@ export async function POST(req:Request){
             const logoPath:string = await fs.savePublicFiles(logo,transformedCandidates.name);
             transformedCandidates.logo= logoPath;
         }
-        // Just ensure even if the there is no logo just use an place holder that set this filed in the db,for it's structure.
-        transformedCandidates.logo=""
+        else{
+            // Just ensure even if the there is no logo just use a placeholder that set this filed in the db,for it's structure.
+                transformedCandidates.logo=""
+        }
         candidates.push(transformedCandidates);
         console.table(transformedCandidates);
         await fs.writeDataJson(candidates);

@@ -21,11 +21,14 @@ export async function PUT (req:Request,{params}:{params:Promise<{id:string}>}){
         if(!existedCandidate ){
             return serverResponse({status:404,message:`The candidate with id ${id} does not exist`});
         }
-        if(existedCandidate.name === name){
-            return serverResponse({status:400,message:"The name of the candidate is the same as old"});
-        }
+        // if(existedCandidate.name === name && !logo.size){
+        //     return serverResponse({status:400,message:"The name of the candidate is the same as old"});
+        // }
         if(logo && logo.size){
             existedCandidate.logo=await fs.savePublicFiles(logo,name);
+        }
+        else {
+            existedCandidate.logo = "";
         }
         existedCandidate.name=name;
         await fs.writeDataJson(candidates);

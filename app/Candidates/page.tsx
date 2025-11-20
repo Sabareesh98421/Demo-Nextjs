@@ -2,9 +2,10 @@
 import Typography from  "@mui/material/Typography";
 import Grid from "@mui/material/Grid"
 import {useState} from "react";
-import {candidates} from "@/data/candidateList";
+
 import Stack from "@mui/material/Stack";
 import CandidateList from "@/components/candidatesList";
+import {candidates} from "@/app/Candidates/_candidateList";
 export default function Candidates(){
     const [isDetailedOpened,setDetailedOpen] = useState<number|null>(null);
 

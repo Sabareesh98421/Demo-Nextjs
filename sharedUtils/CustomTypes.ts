@@ -23,7 +23,17 @@ export type FrameworkData = {
     emails: string[];
     totalVotes: number;
 }
-export type VoteData = Record<string, FrameworkData>;
+export interface Framework {
+    id:string;
+    name: string;
+    logo?: string;
+}
+export type VoteData = {
+    [key in Framework["name"]]:{
+        emails:string[],
+        totalVotes:number
+    }
+};
 
 
 export type LoginFormData = LoginUserData;
@@ -126,11 +136,7 @@ export type FormHookReturns<T>={
     resetForm:ReturnVoidFunction;
 }
 
-export interface Framework {
-    id:string;
-    name: string;
-    logo?: string;
-}
+
 // Server side Types.....
 
 export interface ServerJwtPayload extends JwtPayload {

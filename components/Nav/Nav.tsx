@@ -5,6 +5,8 @@ import Link from "next/link";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
+import Divider from '@mui/material/Divider';
+import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -12,6 +14,7 @@ import Drawer from "@mui/material/Drawer";
 import { useCurrentUserQuery } from "@/features/RTK/Query/GetCurrentUser/GetCurretnUserSlice";
 import { useLogoutMutation } from "@/features/RTK/Query/GetCurrentUser/logout/logoutAPI";
 import { useState } from "react";
+import Stack from "@mui/material/Stack";
 
 export function Nav() {
     const { data: currentUser, isLoading, isFetching } = useCurrentUserQuery();
@@ -46,12 +49,12 @@ export function Nav() {
                     <Box className="hidden md:flex items-center gap-8">
                         <ThemeToggle />
                         {user?.isAdmin && <AdminNavContent />}
-                        {user?.isTokenAvailable && renderDefaultNav(logoutUser)}
+                        {user?.isTokenAvailable && renderDefaultNav(false,logoutUser)}
                     </Box>
 
                     <IconButton
                         edge="end"
-                        sx={{ mr: 2, display: { sm: 'none' } }}
+                        sx={{ mr: 2, display: { xs:"block",sm: 'none'  } }}
                         onClick={() => setOpen(true)}
                     >
                         <MenuIcon />
@@ -66,7 +69,7 @@ export function Nav() {
                 >
                     <ThemeToggle />
                     {user?.isAdmin && <AdminNavContent />}
-                    {user?.isTokenAvailable && renderDefaultNav(() => {
+                    {user?.isTokenAvailable && renderDefaultNav(open,() => {
                         logoutUser();
                         setOpen(false);
                     })}
@@ -76,20 +79,26 @@ export function Nav() {
     );
 }
 
-function renderDefaultNav(logoutUser: () => void) {
+function renderDefaultNav(open:boolean,logoutUser: () => void) {
+    const flexDirection = open ? " flex-col " : " flex-row ";
+    const alignItems = open?" items-start ": " items-center "
     return (
-        <Box className="flex items-center gap-6">
-            <Link href="/vote" className="underline sm:text-xs">
+        <Box className={"flex  gap-2  justify-center" + flexDirection +alignItems}>
+            <Link href="/vote" className="underline " >
                 Click Here for Vote
             </Link>
-
-            <IconButton
+            <Divider/>
+            <Stack direction="row"  component="section" className="flex  gap-2 justify-center items-center ">
+                {open && <Typography component="p" className="underline"> Logout </Typography>}
+                <IconButton
                 aria-label="Logout"
+
                 href="/signIn"
-                onClick={ () =>  logoutUser()}
+                onClick={() => logoutUser()}
             >
-                <LogoutIcon />
+                <LogoutIcon/>
             </IconButton>
+            </Stack>
         </Box>
     );
 }

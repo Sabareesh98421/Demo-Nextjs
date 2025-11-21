@@ -6,8 +6,6 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Radio from "@mui/material/Radio";
 import { useTheme } from "@mui/material";
-import _default from "chart.js/dist/plugins/plugin.tooltip";
-import backgroundColor = _default.defaults.backgroundColor;
 
 export function PollingList({ frameWorks, getVote, disableRadio }: { disableRadio: boolean, frameWorks: string[], getVote: (userVote: DataForBackend) => void }) {
     const [selectedFW, setFW] = useState<string | null>(null);
@@ -48,7 +46,7 @@ export function PollingList({ frameWorks, getVote, disableRadio }: { disableRadi
                     const selectedOption = frameWork===selectedFW ? ` ${theme.palette.primary.main} ` : " ";
                     return <ListItem key={index} className="self-stretch w-full">
                         <section className={'h-16 w-fit  flex justify-center items-center border-2 disabled:opacity-25 border-black ' + cursorStyle } style={{backgroundColor:selectedOption}}>
-                            <Typography component="label" htmlFor={frameWork} className={`h-16 w-full flex justify-start items-center text-center `}>
+                            <Typography component="label" htmlFor={frameWork} className={`h-full  w-full flex justify-start items-center text-center `}>
                                 <section className='h-full w-full p-5 flex justify-center items-center  gap-4'>
                                     <Radio name="frameWork" id={frameWork} className='disabled:opacity-25' sx={{display:"none"}} value={frameWork} onChange={handleChangeWrapper}
                                        checked={selectedFW === frameWork} disabled={disableRadio} />

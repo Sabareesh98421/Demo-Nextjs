@@ -9,20 +9,21 @@ import Typography from "@mui/material/Typography";
 import {PollingList} from "@/components/PoolingList/poolingList";
 import {DataForBackend, FeedbackType} from "@/sharedUtils/CustomTypes";
 import {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
+import {useAllCandidatesQuery} from "@/features/RTK/Query/Admin/GetAllCandidate/GetAllCandidate";
 
 // page.tsx
 const GLOBAL_TIMING = 3000;
 export default function Vote() {
     const router:AppRouterInstance = useRouter();
+    const{data:res} = useAllCandidatesQuery();
     const [feedback, setFeedBack] = useState<FeedbackType>(null);
-
     const clearFeedback = useCallback(() => {
         setFeedBack(null);
     }, []);
 
-    const perfectFrameWork = ["Angular", "Next", "Nuxt","React","Nest","Vue"];
-
-
+    const perfectFrameWork1 = ["Angular", "Next", "Nuxt","React","Nest","Vue"];
+    const perfectFrameWork = res?.data.map((eachFrameWork)=>eachFrameWork.name)
+    // console.warn(frameWork);
     const [votedData, setVotedData] = useState<DataForBackend | null>(null);
     const [disableRadio, setDisableRadio] = useState(false);
 
@@ -31,7 +32,8 @@ export default function Vote() {
     const userVoteReceiver = useCallback((data: DataForBackend | null) => {
         setVotedData(data); // Update the state when the child calls this function
     }, []);
-    
+    if(!perfectFrameWork) return ;
+
     const handleSubmitWrapper = (eve: React.FormEvent) => {
         // alert(`You voted for "${votedData?.frameWork}"`)
         handleSubmit(eve, votedData, setFeedBack, setDisableRadio, clearFeedback, router)

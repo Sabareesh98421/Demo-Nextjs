@@ -26,7 +26,7 @@ export type FrameworkData = {
 export type VoteData = Record<string, FrameworkData>;
 
 
-export type LoginFormData = UserData;
+export type LoginFormData = LoginUserData;
 
 
 export type TInputType = "email"
@@ -138,13 +138,21 @@ export interface ServerJwtPayload extends JwtPayload {
     role: string;
 }
 
+export interface CurrentUser{
+    isTokenAvailable:boolean,
+    isAdmin:boolean,
+    user:ServerJwtPayload|null
+}
 export enum Role{
     Admin="Admin",
     User = "User"
 }
-export interface UserData{
+export interface LoginUserData{
     email:string,
     password:string,
+}
+export interface UserData extends LoginUserData{
+
     role: Role
 }
 export type SignUpResponse = {

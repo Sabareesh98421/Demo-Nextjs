@@ -1,45 +1,103 @@
-import {ThemeToggle} from "@/components/ThemeToggle/themeToggle";
+"use client";
+
+import { ThemeToggle } from "@/components/ThemeToggle/themeToggle";
 import Link from "next/link";
-import {cookies} from "next/headers";
-import {ReadonlyRequestCookies} from "next/dist/server/web/spec-extension/adapters/request-cookies";
-import {decode} from "jsonwebtoken";
-import {Role, ServerJwtPayload} from "@/sharedUtils/CustomTypes";
-import Box from "@mui/material/Box"
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
+import Drawer from "@mui/material/Drawer";
+import { useCurrentUserQuery } from "@/features/RTK/Query/GetCurrentUser/GetCurretnUserSlice";
+import { useLogoutMutation } from "@/features/RTK/Query/GetCurrentUser/logout/logoutAPI";
+import { useState } from "react";
 
-export async function Nav(){
-    const token :string | null= (await getCookies());
-    let  isAdmin:boolean=false;
-    if(token)
-    {
-        isAdmin= isUserIsAdmin(token)
-    }
+export function Nav() {
+    const { data: currentUser, isLoading, isFetching } = useCurrentUserQuery();
+    const [logout] = useLogoutMutation();
+    const [open, setOpen] = useState(false);
 
-    return(
-        <nav className="bg-transparent flex justify-between items-center gap-8 w-[90%]   z-50  pt-8 ">
-            { token &&  (<Link href="/">Polling Candidates</Link>)}
-            <Box className="flex justify-evenly itmes-center w-1/2 ">
-                <ThemeToggle/>
-                {
-                    token &&
-                    <Link href="/vote" className="text-end flex justify-end items-center  underline ">Click Here for
-                        Vote</Link>
-                }
-                {isAdmin && AdminNavContent()}</Box>
-        </nav>
-    )
+    if (isLoading || isFetching) return null;
+
+    const user = currentUser?.data;
+
+    const logoutUser = async () => {
+        await logout().unwrap();
+    };
+
+    return (
+        <>
+            <AppBar
+                component="nav"
+                position="static"
+                color="transparent"
+                elevation={0}
+                className="w-full max-w-[90%] mx-auto pt-4 z-50"
+            >
+                <Toolbar className="flex justify-between items-center w-full">
+
+                    {user?.isTokenAvailable && (
+                        <Link href="/" className="font-semibold">
+                            Polling Candidates
+                        </Link>
+                    )}
+
+                    <Box className="hidden md:flex items-center gap-8">
+                        <ThemeToggle />
+                        {user?.isAdmin && <AdminNavContent />}
+                        {user?.isTokenAvailable && renderDefaultNav(logoutUser)}
+                    </Box>
+
+                    <IconButton
+                        edge="end"
+                        sx={{ mr: 2, display: { sm: 'none' } }}
+                        onClick={() => setOpen(true)}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
+
+            <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
+                <Box
+                    className="flex flex-col gap-6 p-6 min-w-[250px]"
+                    role="presentation"
+                >
+                    <ThemeToggle />
+                    {user?.isAdmin && <AdminNavContent />}
+                    {user?.isTokenAvailable && renderDefaultNav(() => {
+                        logoutUser();
+                        setOpen(false);
+                    })}
+                </Box>
+            </Drawer>
+        </>
+    );
 }
-function AdminNavContent(){
-    return<>
-        <Link href="/Admin/Dashboard"  className="text-end flex justify-end items-center  underline ">Dashboard</Link>
-    </>
+
+function renderDefaultNav(logoutUser: () => void) {
+    return (
+        <Box className="flex items-center gap-6">
+            <Link href="/vote" className="underline sm:text-xs">
+                Click Here for Vote
+            </Link>
+
+            <IconButton
+                aria-label="Logout"
+                href="/signIn"
+                onClick={ () =>  logoutUser()}
+            >
+                <LogoutIcon />
+            </IconButton>
+        </Box>
+    );
 }
-async function getCookies():Promise<string | null>{
-    // I am sure that the middle ware would redirect to the signup/signIn when there is no token at all in the cookie,
-    //  so I used the `!` here.
-    const cookieStore:ReadonlyRequestCookies =  await cookies();
-        return cookieStore.get("token")?.value ?? null
-}
-function isUserIsAdmin(token:string):boolean{
-    const user:ServerJwtPayload = decode(token) as ServerJwtPayload;
-    return user.role===Role.Admin
+
+function AdminNavContent() {
+    return (
+        <Link href="/Admin/Dashboard" className="underline">
+            Dashboard
+        </Link>
+    );
 }

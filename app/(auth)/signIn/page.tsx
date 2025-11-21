@@ -7,7 +7,9 @@ import Link from "@mui/material/Link";
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
-import {AlertColor, Theme, useTheme} from "@mui/material";
+import {AlertColor} from "@mui/material";
+import { useDispatch } from "react-redux";
+import { AppAPI } from "@/features/RTK/CreateAPI/DefineAppApi";
 import {useLoginUserMutation} from "@/features/RTK/Query/loginAPI/Loginapi";
 import {HTTP_Method} from "@/serverUtils/Enums/HTTP_Enum";
 import Snackbar from "@mui/material/Snackbar";
@@ -23,14 +25,10 @@ interface SnackbarState{
 }
 export default function SignIn() {
     const router = useRouter();
-    const theme:Theme = useTheme();
+
     const [snackbar, setSnackbar] = useState<SnackbarState|null>(null);
+    const dispatch = useDispatch();
     const [loginUser,{isLoading}] = useLoginUserMutation();
-    useEffect(() => {
-        const hasToken =
-            localStorage.getItem("authToken") && localStorage.getItem("userEmail");
-        if (hasToken) router.replace("/"); // replace avoids going back to log in with Back btn
-    }, [router]);
 
     const formData = {
         email: "",
@@ -74,6 +72,7 @@ export default function SignIn() {
                 severity:"success"
             })
             console.log(res.message);
+            dispatch(AppAPI.util.invalidateTags(["CurrentUser"]));
             setLocalStorage(userData.email);
             router.push("/")
 

@@ -9,7 +9,9 @@ export const loginAPISlice = AppAPI.injectEndpoints({
                 url:"LogIn",
                 method:HTTP_Method.POST,
                 body:userData
-            })
+            }),
+            invalidatesTags: ["CurrentUser"]
+
         })
     })
 });

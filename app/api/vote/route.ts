@@ -4,19 +4,13 @@ import { FilesHandling} from "@/serverUtils/fileHandling";
 import {VoteData} from "@/sharedUtils/CustomTypes";
 
 
-const defaultVotes: VoteData = {
-    "Next": { emails: [], totalVotes: 0 },
-    "Nuxt": { emails: [], totalVotes: 0 },
-    "Angular": { emails: [], totalVotes: 0 },
-    "Nest": { emails: [], totalVotes: 0 },
-};
 // per instance for per db/json file
 const fs = new FilesHandling("votes.json")
 
 export async function POST(req: Request) {
     const res = NextResponse;
     try {
-        await fs.ensureDataFile<VoteData>(defaultVotes);
+        await fs.ensureDataFile<VoteData[]>([]);
         const { email, frameWork } = await req.json();
         console.log(req.json())
         if (!frameWork || !email) {

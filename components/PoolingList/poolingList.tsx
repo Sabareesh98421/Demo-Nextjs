@@ -5,6 +5,9 @@ import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Radio from "@mui/material/Radio";
+import { useTheme } from "@mui/material";
+import _default from "chart.js/dist/plugins/plugin.tooltip";
+import backgroundColor = _default.defaults.backgroundColor;
 
 export function PollingList({ frameWorks, getVote, disableRadio }: { disableRadio: boolean, frameWorks: string[], getVote: (userVote: DataForBackend) => void }) {
     const [selectedFW, setFW] = useState<string | null>(null);
@@ -15,7 +18,7 @@ export function PollingList({ frameWorks, getVote, disableRadio }: { disableRadi
         }
         return null;
     });
-    const colors = ["bg-red-400", "bg-zinc-800", "bg-green-800","bg-blue-200","bg-red-200","bg-green-800"];
+    const theme= useTheme()
     useEffect(() => {
 
         const userVote: DataForBackend = {
@@ -41,22 +44,24 @@ export function PollingList({ frameWorks, getVote, disableRadio }: { disableRadi
             {frameWorks.map(
                 (frameWork, index) => {
                     console.log("frameWork : ",frameWork)
-                    const [textColor,bgColor,invertImageColor,cursorStyle] = customStyling(selectedFW,frameWork,disableRadio,colors,index)
-
+                    const cursorStyle = disableRadio ? 'cursor-not-allowed ' : 'cursor-pointer ';
+                    const selectedOption = frameWork===selectedFW ? ` ${theme.palette.primary.main} ` : " ";
                     return <ListItem key={index} className="self-stretch w-full">
-                        <section className={'h-16 w-fit p-5 flex justify-center items-center border-2 disabled:opacity-25 border-black ' + textColor + bgColor + cursorStyle}>
-                            <section className='h-fit w-full flex justify-center items-center '>
-                                <Radio name="frameWork" id={frameWork} className='disabled:opacity-25' sx={{display:"none"}} value={frameWork} onChange={handleChangeWrapper}
+                        <section className={'h-16 w-fit  flex justify-center items-center border-2 disabled:opacity-25 border-black ' + cursorStyle } style={{backgroundColor:selectedOption}}>
+                            <Typography component="label" htmlFor={frameWork} className={`h-16 w-full flex justify-start items-center text-center `}>
+                                <section className='h-full w-full p-5 flex justify-center items-center  gap-4'>
+                                    <Radio name="frameWork" id={frameWork} className='disabled:opacity-25' sx={{display:"none"}} value={frameWork} onChange={handleChangeWrapper}
                                        checked={selectedFW === frameWork} disabled={disableRadio} />
-                                <Image src={`/${frameWork.trim()}.png`}
+                                    <Image src={`/${frameWork.trim()}.png`}
                                        alt={`${frameWork}Icon`}
                                        width={40}
                                        height={40}
-                                       className={invertImageColor}
+
                                        unoptimized
-                                />
-                                <Typography component="label" htmlFor={frameWork} className={`h-full w-full p-5 `}>{frameWork}</Typography>
-                            </section>
+                                    />
+                                    {frameWork}
+                                </section>
+                            </Typography>
                         </section>
                     </ListItem>
                 }
@@ -65,30 +70,8 @@ export function PollingList({ frameWorks, getVote, disableRadio }: { disableRadi
     )
 
 }
-function customStyling(selectedFW:string|null,frameWork:string,disableRadio:boolean,colors:string[],index:number):string[]
-{
-    const isSelected:boolean = selectedFW === frameWork;
-    let bgColor;
-    let textColor:string;
-    const cursorStyle = disableRadio ? 'cursor-not-allowed ' : 'cursor-pointer ';
-    if (disableRadio) {
-        bgColor = isSelected ? `${colors[index]} ` : 'bg-gray-500 '; // Selected stays blue (lighter), others gray
-    } else {
-        bgColor = isSelected ? `${colors[index]} ` : ' bg-gray-50  ';
-    }
-    let invertImageColor;
-    if (bgColor === "bg-zinc-800 ") {
-        textColor = "text-white ";
-        invertImageColor = " invert-100 ";
-    }
-    else {
-        textColor = "text-black "
-        invertImageColor = " ";
-    }
-    return[
-        textColor,bgColor,invertImageColor,cursorStyle
-    ]
-}
+
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleVoteClick(eve: React.ChangeEvent, setFw: any) {
     const target: EventTarget = eve.currentTarget;

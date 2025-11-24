@@ -41,7 +41,7 @@ export function Nav() {
 
                     {user?.isTokenAvailable && (
                         <Link href="/" className="font-semibold">
-                            Polling Candidates
+                            Main Menu
                         </Link>
                     )}
 

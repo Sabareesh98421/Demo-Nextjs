@@ -6,11 +6,12 @@ const fs = new FilesHandling("candidates.json");
 export async function POST(req:Request){
     try{
         const newCandidateFormData:FormData= await req.formData() ;
-        const candidateName:string = newCandidateFormData.get("name")  as string;
+        const candidateNameRaw:FormDataEntryValue|null = newCandidateFormData.get("name");
         const logo:File|null=newCandidateFormData.get("logo") as File | null;
-        if(!(candidateName.length)){
+        if(!(candidateNameRaw) || candidateNameRaw.toString().trim().length<=0){
             return serverResponse({status:400,message:"Candidate name is required"});
         }
+        const candidateName:string =  candidateNameRaw.toString().trim();
         await fs.ensureDataFile<Array<Candidates[]>>([]);
         const candidates:Candidates[] = await fs.readDataJson();
         const newCandidate={
@@ -21,8 +22,8 @@ export async function POST(req:Request){
             id:generateCandidateID(),
             name:newCandidate.name as string,
         };
-
-        const duplicateEntry:boolean=candidates.some((candidate)=>(newCandidate.name===candidate.name));
+        const loweredCandidateName =newCandidate.name.toLowerCase();
+        const duplicateEntry:boolean=candidates.some((candidate)=>(loweredCandidateName===candidate.name.trim().toLowerCase()));
         if(duplicateEntry){
             return serverResponse({status:409,message:"Candidate already exists"});
         }

@@ -21,9 +21,9 @@ export default function Vote() {
         setFeedBack(null);
     }, []);
 
-    const perfectFrameWork1 = ["Angular", "Next", "Nuxt","React","Nest","Vue"];
+    // const perfectFrameWork1 = ["Angular", "Next", "Nuxt","React","Nest","Vue"];
     const perfectFrameWork = res?.data.map((eachFrameWork)=>eachFrameWork.name)
-    // console.warn(frameWork);
+    // console.warn(perfectFrameWork);
     const [votedData, setVotedData] = useState<DataForBackend | null>(null);
     const [disableRadio, setDisableRadio] = useState(false);
 
@@ -102,7 +102,7 @@ async function handleSubmit(eve: React.FormEvent, votedData: DataForBackend | nu
             setDisableRadio(true);
             setFeedBack({ text: data.message || "Vote successful!", type: 'success' });
             alert("congratulation you completed the vote")
-            console.log(res);
+            // console.log(res);
             router.push("/vote/result")
         }
         if (res.status === 403) {
@@ -113,7 +113,7 @@ async function handleSubmit(eve: React.FormEvent, votedData: DataForBackend | nu
         }
     }
     catch (err) {
-        console.log(votedData)
+        // console.log(votedData)
         console.log(err);
         setDisableRadio(false);
         setFeedBack({ text: "something went wrong", type: 'error' });

@@ -14,88 +14,133 @@ import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
-import {useTheme} from "@mui/material";
-import {addCandidates, DialogFormFields, editCandidateDialog, useDialogBoxHandler} from "@/components/Component.Hooks/DialogBoxHandler";
+import { useTheme, Snackbar, Alert } from "@mui/material";
+import { addCandidates, DialogFormFields, editCandidateDialog, useDialogBoxHandler } from "@/components/Component.Hooks/DialogBoxHandler";
 import DialogBox from "@/components/DialogBox/DialogBox";
-import {ButtonActionType, DialogFormStruct, DialogGlobalState, Framework} from "@/sharedUtils/CustomTypes";
-import {useState} from "react";
+import { DialogFormStruct, DialogGlobalState, Framework } from "@/sharedUtils/CustomTypes";
+import { useState, useEffect } from "react";
+import { useDeleteCandidateMutation } from "@/features/RTK/Query/Admin/DeleteCandidate/DeleteCandidate";
 
-
-const fields= DialogFormFields
-
+const fields = DialogFormFields;
 
 export default function CandidatesActionList({ frameworks }: { frameworks: Framework[] }) {
     const theme = useTheme();
+    const [deleteCandidate, { isSuccess, isError, isLoading }] = useDeleteCandidateMutation();
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const { handleOpenDialog } = useDialogBoxHandler<DialogFormStruct>();
 
-    const {handleOpenDialog,buttonAction,value,id}=useDialogBoxHandler<DialogFormStruct>()
-    const handleAddCandidate=()=>{
-        handleOpenDialog(addCandidates)
-    }
-    const handleDelete = (frameworkName: string) => {
-        console.log("DELETE →", frameworkName);
+    const handleAddCandidate = () => {
+        handleOpenDialog(addCandidates);
     };
-    const handleEditCandidate=(frameWorkName:string,candidateId:string)=>{
 
-        const editFramework:DialogGlobalState = editCandidateDialog(frameWorkName,candidateId);
-        handleOpenDialog(editFramework)
-    }
+    const handleDelete = async (candidateId: string) => {
+        try {
+            await deleteCandidate(candidateId).unwrap();
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleEditCandidate = (frameWorkName: string, candidateId: string) => {
+        const editFramework: DialogGlobalState = editCandidateDialog(frameWorkName, candidateId);
+        handleOpenDialog(editFramework);
+    };
+
+    useEffect(() => {
+        if (isSuccess) {
+            setSnackbarMessage("Candidate Deleted Successfully!");
+            setOpenSnackbar(true);
+        }
+        if (isError) {
+            setSnackbarMessage("Failed to Delete Candidate.");
+            setOpenSnackbar(true);
+        }
+    }, [isSuccess, isError]);
+
     return (
-        <Paper sx={{ width: "100%", mt: 4, p: 3 }}>
-            <Box className="flex justify-between items-center  " sx={{
-                bgcolor:theme.palette.background.default,
-                p:2,
-            }} >
-                <Typography  variant="h2" sx={{fontSize:16,fontWeight:"Bold"}}>Candidates List</Typography>
-
-                <Button
-                    variant="contained"
-                    startIcon={<AddRoundedIcon />}
-                    onClick={() => handleAddCandidate() }
+        <>
+            <Paper sx={{ width: "100%", mt: 4, p: 3 }}>
+                <Box
+                    className="flex justify-between items-center"
+                    sx={{ bgcolor: theme.palette.background.default, p: 2 }}
                 >
-                    Add Candidate
-                </Button>
-                <DialogBox fields={fields()}></DialogBox>
-            </Box>
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Logo</TableCell>
-                            <TableCell>Framework</TableCell>
-                            <TableCell align="right">Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {frameworks.map((candidate) => (
-                            <TableRow key={candidate.name}>
-                                {candidate.logo && (<TableCell>
-                                    <Image
-                                        src={`${candidate.logo}`}
-                                        alt={candidate.name}
-                                        width={40}
-                                        height={40}
-                                        unoptimized
-                                    />
-                                </TableCell>)}
+                    <Typography variant="h2" sx={{ fontSize: 16, fontWeight: "Bold" }}>
+                        Candidates List
+                    </Typography>
 
-                                <TableCell>{candidate.name}</TableCell>
+                    <Button
+                        variant="contained"
+                        startIcon={<AddRoundedIcon />}
+                        onClick={handleAddCandidate}
+                    >
+                        Add Candidate
+                    </Button>
 
-                                <TableCell align="right">
-                                    <IconButton color="primary">
-                                        <EditIcon onClick={()=>handleEditCandidate(candidate.name,candidate.id)} />
-                                    </IconButton>
-                                    <IconButton
-                                        color="error"
-                                        onClick={() => handleDelete(candidate.name)}
-                                    >
-                                        <DeleteForeverIcon />
-                                    </IconButton>
-                                </TableCell>
+                    <DialogBox fields={fields()} />
+                </Box>
+
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Logo</TableCell>
+                                <TableCell>Framework</TableCell>
+                                <TableCell align="right">Actions</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Paper>
+                        </TableHead>
+                        <TableBody>
+                            {frameworks.map((candidate) => (
+                                <TableRow key={candidate.name}>
+                                    {candidate.logo && (
+                                        <TableCell>
+                                            <Image
+                                                src={`${candidate.logo}`}
+                                                alt={candidate.name}
+                                                width={40}
+                                                height={40}
+                                                unoptimized
+                                            />
+                                        </TableCell>
+                                    )}
+
+                                    <TableCell>{candidate.name}</TableCell>
+
+                                    <TableCell align="right">
+                                        <IconButton
+                                            color="primary"
+                                            onClick={() => handleEditCandidate(candidate.name, candidate.id)}
+                                        >
+                                            <EditIcon />
+                                        </IconButton>
+                                        <IconButton
+                                            color="error"
+                                            onClick={() => handleDelete(candidate.id)}
+                                            disabled={isLoading}
+                                        >
+                                            <DeleteForeverIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Paper>
+
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={3000}
+                onClose={() => setOpenSnackbar(false)}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            >
+                <Alert
+                    severity={isError ? "error" : "success"}
+                    onClose={() => setOpenSnackbar(false)}
+                >
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
+        </>
     );
 }

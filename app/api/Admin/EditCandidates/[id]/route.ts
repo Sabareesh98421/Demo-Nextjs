@@ -6,10 +6,12 @@ const fs = new FilesHandling("candidates.json");
 export async function PUT (req:Request,{params}:{params:Promise<{id:string}>}){
     try{
         const {id}:{id:string} = await params
+
         console.log("id From server :",id);
         const updateRequestData:FormData= await req.formData()  ;
         const name:string|null= (updateRequestData.get("name") as string)??null ;
         const logo :File | null =(updateRequestData.get("logo") as File)??null;
+
         if(!name){
             return serverResponse({status:403,message:"The Framework name needs to be mandatory"})
         }

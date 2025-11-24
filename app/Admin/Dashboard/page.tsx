@@ -16,6 +16,7 @@ const ICON_COLOR_MAP = {
 
 export default async function Dashboard() {
     const dashboardStats:DashboardStats = await dashBoardStats();
+
     const fraworkList = await getCandidate();
     const frameworkCards: CardData[] = getFrameWorkCard(dashboardStats);
     const [chartLabels, chartData]: DashboardChartData = getChartData(dashboardStats.frameWork);
@@ -60,7 +61,7 @@ export default async function Dashboard() {
             />
 
             </Box>
-                <DashboardChart labels={chartLabels} data={chartData}/>
+                {/*<DashboardChart labels={chartLabels} data={chartData}/>*/}
         </Stack>
     );
 }

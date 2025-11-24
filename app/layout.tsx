@@ -4,7 +4,7 @@ import "./globals.css";
 import {AppRouterCacheProvider} from "@mui/material-nextjs/v13-appRouter";
 import ReduxStoreProvider from "@/lib/Provider/reduxStoreProvider"
 import {Bg} from "@/components/Background/Bg";
-import {Nav} from "@/components/Nav/Nav";
+import "@/prototypes/array.extensions"
 import ThemeProviderWrapper from "@/components/themeProvider/ThemeProvider";
 import React from "react";
 

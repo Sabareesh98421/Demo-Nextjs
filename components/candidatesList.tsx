@@ -36,7 +36,7 @@ export default function CandidateList({name,img,pros,cons,expanded,onClick}:Cand
             >
                 <Box component="section"   sx={{
                     width: "100%",
-
+                    height: "100%",
                     overflow: "hidden",
                     padding:2,
 
@@ -46,8 +46,9 @@ export default function CandidateList({name,img,pros,cons,expanded,onClick}:Cand
                     alt={name}
                     width={800}
                     height={500}
-                    className="w-full h-auto block object-cover"
-                />
+                    className="w-full h-auto block object-cover scale-75"
+                    unoptimized
+                    />
                 </Box>
                 <Typography variant="h2" textAlign="center" p={2} className="w-full">
                     {name}

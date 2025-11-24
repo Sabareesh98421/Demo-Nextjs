@@ -1,5 +1,4 @@
 "use client";
-
 import { ThemeToggle } from "@/components/ThemeToggle/themeToggle";
 import Link from "next/link";
 import AppBar from "@mui/material/AppBar";
@@ -23,7 +22,7 @@ export function Nav() {
 
     if (isLoading || isFetching) return null;
 
-    const user = currentUser?.data;
+    const user = currentUser?.data??null;
 
     const logoutUser = async () => {
         await logout().unwrap();

@@ -15,7 +15,6 @@ export function serverResponse<T=unknown>({status = 200, message = "ok", data= n
         return NextResponse.json({message,data},{status})
     }
     return NextResponse.json({message},{status})
-
 }
 
 export function redirect(path:string,reqUrl:string)

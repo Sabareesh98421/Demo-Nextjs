@@ -1,19 +1,21 @@
 import {v4 as uuidv4} from "uuid";
 import {FilesHandling} from "@/serverUtils/fileHandling";
 import {serverResponse} from "@/serverUtils/ServerResponse";
-import {Candidates, NewCandidate} from "@/sharedUtils/CustomTypes";
-
+import {Candidates} from "@/sharedUtils/CustomTypes";
 const fs = new FilesHandling("candidates.json");
 export async function POST(req:Request){
     try{
-
         const newCandidateFormData:FormData= await req.formData() ;
+        const candidateName:string = newCandidateFormData.get("name")  as string;
+        const logo:File|null=newCandidateFormData.get("logo") as File | null;
+        if(!(candidateName.length)){
+            return serverResponse({status:400,message:"Candidate name is required"});
+        }
         await fs.ensureDataFile<Array<Candidates[]>>([]);
         const candidates:Candidates[] = await fs.readDataJson();
         const newCandidate={
-            name:newCandidateFormData.get("name"),
+            name:candidateName
         }
-            const logo:File|null=newCandidateFormData.get("logo") as File | null;
         console.log(newCandidate)
         const  transformedCandidates:Candidates={
             id:generateCandidateID(),
@@ -25,8 +27,7 @@ export async function POST(req:Request){
             return serverResponse({status:409,message:"Candidate already exists"});
         }
         if(logo){
-            const logoPath:string = await fs.savePublicFiles(logo,transformedCandidates.name);
-            transformedCandidates.logo= logoPath;
+            transformedCandidates.logo= await fs.savePublicFiles(logo,transformedCandidates.name);
         }
         else{
             // Just ensure even if the there is no logo just use a placeholder that set this filed in the db,for it's structure.

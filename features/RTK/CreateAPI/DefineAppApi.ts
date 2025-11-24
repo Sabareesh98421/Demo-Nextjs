@@ -5,5 +5,5 @@ export const AppAPI=createApi({
     reducerPath:"fetchApi",
     baseQuery:fetchBaseQuery({baseUrl:"/api/"}),
     endpoints:()=> ({}),
-    tagTypes:["CurrentUser"]
+    tagTypes:["CurrentUser","Candidates"]
 })

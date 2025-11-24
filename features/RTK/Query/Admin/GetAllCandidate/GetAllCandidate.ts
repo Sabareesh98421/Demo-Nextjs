@@ -1,5 +1,6 @@
 import {AppAPI} from "@/features/RTK/CreateAPI/DefineAppApi";
 import {Framework, ServerResponseWithData} from "@/sharedUtils/CustomTypes";
+import path from "path";
 
 
 const getAllCandidate = AppAPI.injectEndpoints({
@@ -10,3 +11,16 @@ const getAllCandidate = AppAPI.injectEndpoints({
     })
 })
 export const {useAllCandidatesQuery} = getAllCandidate;
+
+
+
+
+function fetcher<T>(path:string,method:string,data?:T){
+    const headers={}
+
+    return fetch(path,{
+        method:method,
+        headers:headers,
+        body:data
+    })
+}

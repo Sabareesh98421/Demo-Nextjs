@@ -16,11 +16,14 @@ export async function POST(req:Request){
     const loweredEmail=email.toLowerCase();
     await fs.ensureDataFile([]);
     const {isPasswordMatched,isEmailMatched,data} = await isUserValid(loweredEmail,password)
-
-    if(!(isPasswordMatched && isEmailMatched)){
-        return serverResponse({status:403,message:"User doesn't not exist"})
+    const {isValid:isPasswordValidFormate,errors} =  isPasswordValid(password)
+    if(!isPasswordValidFormate){
+        return serverResponse({status:401,message:errors.toString()})
     }
-    if( isEmailMatched && !isPasswordMatched){
+    if(! isEmailMatched){
+        return serverResponse({status:403,message:"User doesn't exist"})
+    }
+    if(!isPasswordMatched){
         return serverResponse({status:401,message:"Password incorrect"})
     }
     console.log("User",loweredEmail,"is logging in");
@@ -61,4 +64,32 @@ async function isUserValid (email:string,password:string):Promise<isUserValid<Us
     return{
         isPasswordMatched:false,isEmailMatched:true,data:null
     }
+}
+
+function isPasswordValid(password:string){
+    const errors:string[] =[];
+
+    if(password.length<8){
+        errors.push("Password must be at least 8 characters");
+
+    }
+    if(!/[a-z]/.test(password)){
+        errors.push("Password must be at least one lowercase letter");
+
+    }
+    if(!/[A-Z]/.test(password)){
+        errors.push("Password must be at least one uppercase letter");
+
+    }
+    if(!/[0-9]/.test(password)){
+        errors.push("Password must be at least one number");
+
+    }
+    if(!/[\W_]/.test(password)){
+        errors.push("Password must be at least one special character");
+
+    }
+    return {
+        isValid:errors.length===0,errors
+    };
 }

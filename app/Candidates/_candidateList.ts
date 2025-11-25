@@ -26,7 +26,7 @@ export const candidates = [
     },
     {
         name: "Nuxt.js",
-        img: "/NUXT.svg",
+        img: "/Nuxt.png",
         pros: [
             "Great Vue ecosystem integration",
             "SSR out of the box",

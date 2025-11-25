@@ -28,6 +28,7 @@ export interface Framework {
     name: string;
     logo?: string;
 }
+
 export type VoteData = {
     [key in Framework["name"]]:{
         emails:string[],

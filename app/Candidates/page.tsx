@@ -1,42 +1,63 @@
 "use client"
-import Typography from  "@mui/material/Typography";
-import Grid from "@mui/material/Grid"
-import {useState} from "react";
+import Typography from "@mui/material/Typography"
+import Stack from "@mui/material/Stack"
+import { useState } from "react"
+import CandidateList from "@/components/candidatesList"
+import { candidates } from "@/app/Candidates/_candidateList"
 
-import Stack from "@mui/material/Stack";
-import CandidateList from "@/components/candidatesList";
-import {candidates} from "@/app/Candidates/_candidateList";
-export default function Candidates(){
-    const [isDetailedOpened,setDetailedOpen] = useState<number|null>(null);
-
+export default function Candidates() {
+    const [isDetailedOpened, setDetailedOpen] = useState<number | null>(null)
 
     return (
-            <Stack className="h-full flex-col " direction="column">
-                    <Typography component="h1" width="100%"  textAlign="center" m={2} fontSize={20} fontWeight={28}>
-                        Candidate Lists (click for details)
-                    </Typography>
-                <Grid container  spacing={3} className="justify-center items-center flex-wrap">
+        <Stack direction="column" sx={{ width: "100%", py: 4 }}>
+            <Typography
+                component="h1"
+                width="100%"
+                textAlign="center"
+                mb={5}
+                fontSize={24}
+                fontWeight={600}
+            >
+                Polling Details
+            </Typography>
 
-                    {
-                        candidates.map((candidate,i)=>(
-                            <Grid
-                                item
-                                key = {candidate.name}
-                                xs={12}
-                                sm={6}
-                                md={4}
-                                lg={3}
-                                // sm={isDetailedOpened===i?12:6}
-                                sx={{ transition: "all 0.4s ease" }}
-                            >
-                                <CandidateList {...candidate} expanded={isDetailedOpened===i} onClick={()=>(setDetailedOpen(isDetailedOpened===i?null:i))}></CandidateList>
-                            </Grid>
-                            )
+            <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="flex-start"
+                flexWrap="wrap"
+                columnGap={4}
+                rowGap={5}
+                sx={{ width: "100%" }}
+            >
+                {candidates.map((candidate, i) => {
+                    const expanded = isDetailedOpened === i
 
-                        )
-                    }
-
-                </Grid>
+                    return (
+                        <Stack
+                            key={candidate.name}
+                            sx={{
+                                width: expanded
+                                    ? "100%"          // full width on expand
+                                    : {
+                                        xs: "100%",    // 1 card per row on phones
+                                        sm: "48%",     // 2 per row on tablets
+                                        md: "23%",     // 4 per row on desktops (mandatory)
+                                    },
+                                transition: "width 0.35s ease",
+                            }}
+                        >
+                            <CandidateList
+                                {...candidate}
+                                expanded={expanded}
+                                onClick={() =>
+                                    setDetailedOpen(expanded ? null : i)
+                                }
+                            />
+                        </Stack>
+                    )
+                })}
             </Stack>
+        </Stack>
     )
 }

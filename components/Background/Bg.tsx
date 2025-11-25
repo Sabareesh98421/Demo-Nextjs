@@ -123,24 +123,26 @@ export function Bg({variant="section",children}:{variant:LayoutTag,children:Reac
             </Box>
 
 
-                <Box className="h-screen w-screen" sx={{
+            <Box
+                sx={{
                     position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
+                    inset: 0,
                     zIndex: 10,
                     display: "flex",
-                    justifyContent: "center",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
                     alignItems: "center",
-                    flexDirection:"column",
-                    py:"2rem",
-                    m:1,
-                    // gridAutoRows:"min-content",
-                    p: { xs: 2, sm: 3, md: 4 },
-                }}>
-                    <Nav/>
-                    {children}
+                    height: "100dvh",
+                    width: "100%",
+                    overflowY: "auto",
+                    pb: "2rem",
+                    px: { xs: 2, sm: 3, md: 4 },
+                }}
+            >
+                <Nav/>
+                    <Box width="100%" display="flex"   justifyContent="center" alignItems="center"   >
+                        {children}
+                    </Box>
                 </Box>
         </Box>
     )

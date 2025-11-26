@@ -3,10 +3,11 @@ import {responseCarrier} from "@/serverUtils/ServerResponse";
 import {Role, ServerJwtPayload} from "@/sharedUtils/CustomTypes";
 
 const secretKey:Secret|null = process.env.SECRET_KEY ?? null;
-if(!secretKey){
-    throw new ReferenceError("There Is no Secret key for the JWT , that I can secure please creat a .env file if it's doesn't exist")
-}
+
 export function createJWT(email:string,role:Role){
+    if(!secretKey){
+        throw new ReferenceError("There Is no Secret key for the JWT , that I can secure please creat a .env file if it's doesn't exist")
+    }
     return jwt.sign({email,role},( secretKey as Secret), {algorithm:"HS512",expiresIn: "2h"});
 }
 export function parseJWT(token:string){

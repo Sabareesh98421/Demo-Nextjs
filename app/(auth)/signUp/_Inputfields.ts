@@ -1,15 +1,22 @@
-import {Form} from "@/sharedUtils/CustomTypes";
+import { InputTypeSType, TInputType} from "@/sharedUtils/CustomTypes";
 
-export const signUpForm:Form[] =[
+export interface SignUpField {
+    id:string;
+    type: TInputType,
+    name: string;
+}
+export type FormSchema<T> = T[]
+export const signUpForm:FormSchema<SignUpField>
+    =[
     {
         id:"email",
-        type:"email",
+        type:InputTypeSType.Email,
         name:"Email",
 
     },
     {
         id:"password",
-        type:"password",
+        type:InputTypeSType.Password,
         name:"Password",
 
 
@@ -17,7 +24,7 @@ export const signUpForm:Form[] =[
     ,
     {
         id:"confirmPassword",
-        type:"password",
+        type:InputTypeSType.Password,
         name:"Confirm Password",
 
     }

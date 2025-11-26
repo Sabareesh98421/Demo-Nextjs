@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import FormLabel from "@mui/material/FormLabel";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import {signUpForm} from "./_Inputfields";
+import {FormSchema, SignUpField, signUpForm} from "./_Inputfields";
 import Link from "@mui/material/Link";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/lib/Store";
@@ -20,6 +20,7 @@ import {Theme, useTheme} from "@mui/material";
 import {useRouter} from "next/navigation";
 import {HTTP_Method} from "@/serverUtils/Enums/HTTP_Enum";
 import {userRegisterSchema} from "@/Validations/singupFormSchema";
+import {ValidationError} from "yup";
 
 export default function Page():JSX.Element{
     const router = useRouter();
@@ -69,7 +70,7 @@ export default function Page():JSX.Element{
         catch(err:any){
             if (err.name === "ValidationError") {
                 // Yup errors
-                const validationMessages = err.inner.map((e) => e.message);
+                const validationMessages = err.inner.map((e:ValidationError) => e.message);
                 setErrorsMessage(validationMessages);
                 setDisplayError(true);
             } else {
@@ -110,7 +111,7 @@ export default function Page():JSX.Element{
                 <Typography variant="h3" textAlign="center" className={"border-b-2 block w-full"} color={theme.palette.text.secondary}> Sign Up</Typography>
                 <Box className="w-full flex  flex-col gap-2 " m={2} sx={{color:theme.palette.text.secondary}}>
                     {
-                        RenderFormFields<Form>(signUpForm,formDataRedux,true,theme,changeHandlerRedux)
+                        RenderFormFields(signUpForm,formDataRedux,true,theme,changeHandlerRedux)
                     }
 
                     <Link textAlign="right" href="/signIn" sx={{
@@ -152,10 +153,10 @@ export default function Page():JSX.Element{
 
 
 
-function RenderFormFields<T extends Form>(fields:T[],value:SignUpFormData,isMandatory:boolean,theme:Theme,changeHandler:(field:keyof SignUpFormData,value:string)=>void) {
+function RenderFormFields(fields:FormSchema<SignUpField>,value:SignUpFormData,isMandatory:boolean,theme:Theme,changeHandler:(field:keyof SignUpFormData,value:string)=>void) {
 
-    return fields.map((field) => {
-
+    return fields.map((field:SignUpField) => {
+            const name = field.name.toLowerCase() as keyof SignUpFormData;
             return (
                 <Box component="section" key={field.id as string} className="w-full flex justify-between items-center gap-8"
                  sx={{
@@ -167,7 +168,7 @@ function RenderFormFields<T extends Form>(fields:T[],value:SignUpFormData,isMand
 
                 <TextField variant="outlined" {...field}
 
-                           size="small" value={value[field.id]} slotProps=
+                           size="small" value={value[name]} slotProps=
                     {
                         {
                             input: {
@@ -178,7 +179,7 @@ function RenderFormFields<T extends Form>(fields:T[],value:SignUpFormData,isMand
                         }
 
                 }
-                           onChange={(eve) => changeHandler(field.id, eve.target.value)}/>
+                           onChange={(eve) => changeHandler(name, eve.target.value)}/>
             </Box>)
         }
 

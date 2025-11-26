@@ -41,6 +41,24 @@ export default function Vote() {
 
     }
 
+    function renderPollingCandidate() {
+        if(!perfectFrameWork){
+            return (<Typography>Yet to add candidates for the vote, if you are a admin please ad candidate else please
+                contact your admin.</Typography>)
+        }
+        return (
+            <>
+                <Activity mode={perfectFrameWork?"visible":"hidden"}>
+                    {perfectFrameWork &&
+                        <PollingList frameWorks={perfectFrameWork} getVote={userVoteReceiver} disableRadio={disableRadio} />
+
+                    }
+                </Activity>
+                {/* I share the same state of the disable button */}
+                <Button type="submit" variant="contained" className=' text-center cursor-default disabled:bg-gray-500 disabled:cursor-not-allowed' disabled={disableRadio}> Vote </Button>
+            </>
+        )
+    }
     const feedbackClasses = feedback?.type === 'error'
         ? 'bg-red-500 text-white'
         : 'bg-green-500 text-white';
@@ -70,28 +88,14 @@ export default function Vote() {
                     </Box>
                 </Box>
                 <Typography>Please Select You favorite framework </Typography>
-                {renderPollingCandidate(perfectFrameWork,userVoteReceiver,disableRadio)}
-                {/* I share the same state of the disable button */}
-                <Button type="submit" variant="contained" className=' text-center cursor-default disabled:bg-gray-500 disabled:cursor-not-allowed' disabled={disableRadio}> Vote </Button>
+                {renderPollingCandidate()}
+
             </Box>
         </FormControl>
     </>
 }
 
 
-function renderPollingCandidate(perfectFrameWork:string[] |null,userVoteReceiver:()=>void,disableRadio:boolean) {
-    if(!perfectFrameWork){
-         return (<Typography>Yet to add candidates for the vote, if you are a admin please ad candidate else please
-            contact your admin.</Typography>)
-    }
-    return (
-        <Activity mode={perfectFrameWork?"visible":"hidden"}>
-            {perfectFrameWork &&
-                <PollingList frameWorks={perfectFrameWork} getVote={userVoteReceiver} disableRadio={disableRadio} />
-            }
-        </Activity>
-    )
-}
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleSubmit(eve: React.FormEvent, votedData: DataForBackend | null,  setFeedBack: any, setDisableRadio: any, clearFeedBack: any,router:AppRouterInstance) {
     eve.preventDefault();

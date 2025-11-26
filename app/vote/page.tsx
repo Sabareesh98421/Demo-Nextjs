@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useCallback } from 'react';
+import React, {useState, useCallback, Activity} from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Button from "@mui/material/Button";
@@ -22,7 +22,7 @@ export default function Vote() {
     }, []);
 
     // const perfectFrameWork1 = ["Angular", "Next", "Nuxt","React","Nest","Vue"];
-    const perfectFrameWork = res?.data.map((eachFrameWork)=>eachFrameWork.name)
+    const perfectFrameWork:string[] | null = res?.data.map((eachFrameWork)=>eachFrameWork.name)??null
     // console.warn(perfectFrameWork);
     const [votedData, setVotedData] = useState<DataForBackend | null>(null);
     const [disableRadio, setDisableRadio] = useState(false);
@@ -32,7 +32,7 @@ export default function Vote() {
     const userVoteReceiver = useCallback((data: DataForBackend | null) => {
         setVotedData(data); // Update the state when the child calls this function
     }, []);
-    if(!perfectFrameWork) return ;
+
 
     const handleSubmitWrapper = (eve: React.FormEvent) => {
         // alert(`You voted for "${votedData?.frameWork}"`)
@@ -40,11 +40,7 @@ export default function Vote() {
         setDisableRadio(true)
 
     }
-    const handleLogout = () => {
-        localStorage.clear();
-        router.push("/signIn")
 
-    }
     const feedbackClasses = feedback?.type === 'error'
         ? 'bg-red-500 text-white'
         : 'bg-green-500 text-white';
@@ -71,17 +67,30 @@ export default function Vote() {
                                 <p>Result</p>
                             </Link>
                         </Typography>
-
-                        <Typography component="span" className='self-end text-right text-xl  h-fit '  onClick={handleLogout}>Logout</Typography>
                     </Box>
                 </Box>
-                <Typography>Please Vote For The Listed Candidates Below</Typography>
-                <PollingList frameWorks={perfectFrameWork} getVote={userVoteReceiver} disableRadio={disableRadio} />
+                <Typography>Please Select You favorite framework </Typography>
+                {renderPollingCandidate(perfectFrameWork,userVoteReceiver,disableRadio)}
                 {/* I share the same state of the disable button */}
                 <Button type="submit" variant="contained" className=' text-center cursor-default disabled:bg-gray-500 disabled:cursor-not-allowed' disabled={disableRadio}> Vote </Button>
             </Box>
         </FormControl>
     </>
+}
+
+
+function renderPollingCandidate(perfectFrameWork:string[] |null,userVoteReceiver:()=>void,disableRadio:boolean) {
+    if(!perfectFrameWork){
+         return (<Typography>Yet to add candidates for the vote, if you are a admin please ad candidate else please
+            contact your admin.</Typography>)
+    }
+    return (
+        <Activity mode={perfectFrameWork?"visible":"hidden"}>
+            {perfectFrameWork &&
+                <PollingList frameWorks={perfectFrameWork} getVote={userVoteReceiver} disableRadio={disableRadio} />
+            }
+        </Activity>
+    )
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleSubmit(eve: React.FormEvent, votedData: DataForBackend | null,  setFeedBack: any, setDisableRadio: any, clearFeedBack: any,router:AppRouterInstance) {

@@ -23,7 +23,6 @@ import { useDeleteCandidateMutation } from "@/features/RTK/Query/Admin/DeleteCan
 import {useAllCandidatesQuery} from "@/features/RTK/Query/Admin/GetAllCandidate/GetAllCandidate";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const fields = DialogFormFields;
 
 export default function CandidatesActionList({ propsFrameworks }: { propsFrameworks: Framework[] }) {
     const theme = useTheme();
@@ -34,6 +33,7 @@ export default function CandidatesActionList({ propsFrameworks }: { propsFramewo
     const { handleOpenDialog } = useDialogBoxHandler<DialogFormStruct>();
 
     const CandidateRow = data?.data ?? propsFrameworks ??[];
+    const fields = DialogFormFields;
 
     const handleAddCandidate = () => {
         handleOpenDialog(addCandidates);
@@ -106,8 +106,8 @@ export default function CandidatesActionList({ propsFrameworks }: { propsFramewo
                         <TableBody>
                             {CandidateRow.map((candidate:Framework) => (
                                 <TableRow key={candidate.name}>
-                                    {candidate.logo && (
-                                        <TableCell>
+                                    <TableCell>
+                                        {candidate.logo ? (
                                             <Image
                                                 src={`${candidate.logo}`}
                                                 alt={candidate.name}
@@ -115,8 +115,8 @@ export default function CandidatesActionList({ propsFrameworks }: { propsFramewo
                                                 height={40}
                                                 unoptimized
                                             />
-                                        </TableCell>
-                                    )}
+                                        ) : <div></div>}
+                                    </TableCell>
 
                                     <TableCell>{candidate.name}</TableCell>
 

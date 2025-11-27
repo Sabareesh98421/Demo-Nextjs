@@ -61,7 +61,7 @@ export default async function Dashboard() {
             />
 
             </Box>
-                {/*<DashboardChart labels={chartLabels} data={chartData}/>*/}
+                <DashboardChart labels={chartLabels} data={chartData}/>
         </Stack>
     );
 }

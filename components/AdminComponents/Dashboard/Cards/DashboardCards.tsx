@@ -2,7 +2,7 @@
 
 import React from "react";
 import Paper from "@mui/material/Paper";
-import Avatar from "@mui/material/Avatar";
+import Image from "next/image";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material";
@@ -54,20 +54,33 @@ export default function DashboardCard({ label, value, iconName, color, image }: 
                     {value}
                 </Typography>
             </Box>
+            <Box
+                sx={{
+                    width: 56,
+                    height: 56,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
+            >
+                {image ? (
+                    <Image
+                        src={image}
+                        alt={label}
+                        width={56}
+                        height={56}
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "contain",
+                        }}
+                        unoptimized
+                    />
+                ) : Icon ? (
+                    <Icon sx={{ fontSize: 40, color: theme.palette[color].main }} />
+                ) : null}
+            </Box>
 
-            {image ? (
-                <Avatar src={image} alt={label} sx={{ width: 56, height: 56 }} />
-            ) : Icon ? (
-                <Avatar
-                    sx={{
-                        bgcolor: (theme) => theme.palette[color].main + "33",
-                        width: 56,
-                        height: 56,
-                    }}
-                >
-                    <Icon sx={{ fontSize: 28, color: theme.palette[color].main }} />
-                </Avatar>
-            ) : null}
         </Paper>
     );
 }

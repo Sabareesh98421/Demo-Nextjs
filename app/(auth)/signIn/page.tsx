@@ -11,8 +11,9 @@ import {AlertColor} from "@mui/material";
 import { useDispatch } from "react-redux";
 import { AppAPI } from "@/features/RTK/CreateAPI/DefineAppApi";
 import {useLoginUserMutation} from "@/features/RTK/Query/loginAPI/Loginapi";
-import {HTTP_Method} from "@/serverUtils/Enums/HTTP_Enum";
+import {HTTP_Method} from "@/sharedUtils/Enums/HTTP_Enum";
 import Snackbar from "@mui/material/Snackbar";
+import {RTKTagsEnum} from "@/sharedUtils/Enums/RTK_InvalidationTags";
 
 // signIn/page.tsx
 interface ISignInDataForAPi {
@@ -72,7 +73,7 @@ export default function SignIn() {
                 severity:"success"
             })
             console.log(res.message);
-            dispatch(AppAPI.util.invalidateTags(["CurrentUser"]));
+            dispatch(AppAPI.util.invalidateTags([RTKTagsEnum.CurrentUser]));
             setLocalStorage(userData.email);
             router.push("/")
 

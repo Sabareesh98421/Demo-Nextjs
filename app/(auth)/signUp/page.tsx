@@ -18,7 +18,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Snackbar from "@mui/material/Snackbar";
 import {Theme, useTheme} from "@mui/material";
 import {useRouter} from "next/navigation";
-import {HTTP_Method} from "@/serverUtils/Enums/HTTP_Enum";
+import {HTTP_Method} from "@/sharedUtils/Enums/HTTP_Enum";
 import {userRegisterSchema} from "@/Validations/singupFormSchema";
 import {ValidationError} from "yup";
 

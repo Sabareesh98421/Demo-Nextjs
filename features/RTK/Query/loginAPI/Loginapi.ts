@@ -1,6 +1,6 @@
 import {AppAPI} from "@/features/RTK/CreateAPI/DefineAppApi";
 import {LoginFormData, LoginResponse} from "@/sharedUtils/CustomTypes";
-import {HTTP_Method} from "@/serverUtils/Enums/HTTP_Enum";
+import {HTTP_Method} from "@/sharedUtils/Enums/HTTP_Enum";
 
 export const loginAPISlice = AppAPI.injectEndpoints({
     endpoints:(build)=>({

@@ -1,4 +1,5 @@
 import {AppAPI} from "@/features/RTK/CreateAPI/DefineAppApi";
+import {CandidateListEnum, RTKTagsEnum} from "@/sharedUtils/Enums/RTK_InvalidationTags";
 
 export const candidatesApi = AppAPI.injectEndpoints({
     endpoints: (builder) => ({
@@ -8,6 +9,7 @@ export const candidatesApi = AppAPI.injectEndpoints({
                 method: "POST",
                 body: formData,
             }),
+            invalidatesTags:[{type: RTKTagsEnum.Candidates as const,id:CandidateListEnum.LIST}],
         }),
 
         editCandidate: builder.mutation({
@@ -16,6 +18,7 @@ export const candidatesApi = AppAPI.injectEndpoints({
                 method: "PUT",
                 body: formData,
             }),
+            invalidatesTags:[{type:RTKTagsEnum.Candidates as const,id:CandidateListEnum.LIST}],
         }),
     }),
 });

@@ -1,5 +1,5 @@
 import {AppAPI} from "@/features/RTK/CreateAPI/DefineAppApi";
-import {HTTP_Method} from "@/serverUtils/Enums/HTTP_Enum";
+import {HTTP_Method} from "@/sharedUtils/Enums/HTTP_Enum";
 
 const logoutCurrentUser = AppAPI.injectEndpoints({
 endpoints:(build)=>({

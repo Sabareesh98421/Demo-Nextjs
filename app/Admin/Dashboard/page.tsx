@@ -53,7 +53,7 @@ export default async function Dashboard() {
 
             <Box className="flex flex-wrap gap-6">
                 <CandidatesActionList
-                frameworks={fraworkList.map(f => ({
+                    propsFrameworks={fraworkList.map(f => ({
                     id:f.id,
                     name: f.name,
                     logo: f.logo!

@@ -1,5 +1,6 @@
 import { AppAPI } from "@/features/RTK/CreateAPI/DefineAppApi";
-import { HTTP_Method } from "@/serverUtils/Enums/HTTP_Enum";
+import { HTTP_Method } from "@/sharedUtils/Enums/HTTP_Enum";
+import {CandidateListEnum, RTKTagsEnum} from "@/sharedUtils/Enums/RTK_InvalidationTags";
 
 const deleteCandidateAPI = AppAPI.injectEndpoints({
     endpoints: (build) => ({
@@ -9,8 +10,8 @@ const deleteCandidateAPI = AppAPI.injectEndpoints({
                 method: HTTP_Method.DELETE,
             }),
             invalidatesTags: (result, error, id ) => [
-                { type: "Candidates", id },
-                { type: "Candidates", id: "candidateList" },
+                { type: RTKTagsEnum.Candidates, id },
+                { type: RTKTagsEnum.Candidates, id: CandidateListEnum.LIST },
             ],
         }),
     }),

@@ -18,17 +18,22 @@ import { useTheme, Snackbar, Alert } from "@mui/material";
 import { addCandidates, DialogFormFields, editCandidateDialog, useDialogBoxHandler } from "@/components/Component.Hooks/DialogBoxHandler";
 import DialogBox from "@/components/DialogBox/DialogBox";
 import { DialogFormStruct, DialogGlobalState, Framework } from "@/sharedUtils/CustomTypes";
-import { useState, useEffect } from "react";
+import {useState, useEffect, Suspense} from "react";
 import { useDeleteCandidateMutation } from "@/features/RTK/Query/Admin/DeleteCandidate/DeleteCandidate";
+import {useAllCandidatesQuery} from "@/features/RTK/Query/Admin/GetAllCandidate/GetAllCandidate";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const fields = DialogFormFields;
 
-export default function CandidatesActionList({ frameworks }: { frameworks: Framework[] }) {
+export default function CandidatesActionList({ propsFrameworks }: { propsFrameworks: Framework[] }) {
     const theme = useTheme();
+    const {data,isLoading:isAllCandidateLoading,isFetching}= useAllCandidatesQuery();
     const [deleteCandidate, { isSuccess, isError, isLoading }] = useDeleteCandidateMutation();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const { handleOpenDialog } = useDialogBoxHandler<DialogFormStruct>();
+
+    const CandidateRow = data?.data ?? propsFrameworks ??[];
 
     const handleAddCandidate = () => {
         handleOpenDialog(addCandidates);
@@ -47,6 +52,7 @@ export default function CandidatesActionList({ frameworks }: { frameworks: Frame
         handleOpenDialog(editFramework);
     };
 
+
     useEffect(() => {
         if (isSuccess) {
             setSnackbarMessage("Candidate Deleted Successfully!");
@@ -56,8 +62,16 @@ export default function CandidatesActionList({ frameworks }: { frameworks: Frame
             setSnackbarMessage("Failed to Delete Candidate.");
             setOpenSnackbar(true);
         }
-    }, [isSuccess, isError]);
+            // refetch()
 
+    }, [isSuccess, isError]);
+    if (isAllCandidateLoading || isFetching) {
+        return (
+            <Paper sx={{ width: "100%", mt: 4, p: 3, textAlign: "center" }}>
+                <CircularProgress />
+            </Paper>
+        );
+    }
     return (
         <>
             <Paper sx={{ width: "100%", mt: 4, p: 3 }}>
@@ -90,7 +104,7 @@ export default function CandidatesActionList({ frameworks }: { frameworks: Frame
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {frameworks.map((candidate) => (
+                            {CandidateRow.map((candidate:Framework) => (
                                 <TableRow key={candidate.name}>
                                     {candidate.logo && (
                                         <TableCell>

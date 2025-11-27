@@ -16,7 +16,7 @@ import {
 import { useDialogBoxHandler } from "@/components/Component.Hooks/DialogBoxHandler";
 import { ButtonActionType, FormUIStruct, InputTypeSType, ServerResponse } from "@/sharedUtils/CustomTypes";
 import CloseIcon from "@mui/icons-material/Close";
-import { HTTP_Method } from "@/serverUtils/Enums/HTTP_Enum";
+import { HTTP_Method } from "@/sharedUtils/Enums/HTTP_Enum";
 import { useForm } from "@/CustomHooks/useForm";
 import {useState, useEffect, type FormEvent, useRef} from "react";
 import {
@@ -24,9 +24,13 @@ import {
     useEditCandidateMutation
 } from "@/features/RTK/Query/Admin/CandidateActions/CandidateActions";
 import { CandidateSchema } from "@/Validations/DialogBoxForms/DialogBoxForm";
+import {useDispatch} from "react-redux";
+import {AppAPI} from "@/features/RTK/CreateAPI/DefineAppApi";
+import {CandidateListEnum, RTKTagsEnum} from "@/sharedUtils/Enums/RTK_InvalidationTags";
 
 export default function DialogBox<T extends FormUIStruct>({ fields }: { fields: T[] }) {
     const { open, title, handleClose, buttonAction, value, id } = useDialogBoxHandler();
+    const dispatch = useDispatch();
     const [addCandidate, { isSuccess: addSuccess, isError: addError }] = useAddCandidateMutation();
     const [editCandidate, { isSuccess: editSuccess, isError: editError }] = useEditCandidateMutation();
     const buttonRef = useRef<ButtonActionType>(buttonAction);
@@ -53,7 +57,9 @@ export default function DialogBox<T extends FormUIStruct>({ fields }: { fields: 
     useEffect(() => {
         if (addSuccess || editSuccess) {
             setSnackbarMessage(buttonRef.current === ButtonActionType.Edit ? "Candidate Updated!" : "Candidate Added!");
-            setOpenSnackbar(true);
+            setOpenSnackbar(true)
+            // dispatch(AppAPI.util.invalidateTags([{ type: RTKTagsEnum.Candidates, id: CandidateListEnum.LIST}]));
+
         }
         if (addError || editError) {
             setSnackbarMessage("Something Failed.");
@@ -68,11 +74,16 @@ export default function DialogBox<T extends FormUIStruct>({ fields }: { fields: 
 
             const finalForm = toFormData(finalFormData);
             buttonRef.current=buttonAction
+
             if (buttonAction === ButtonActionType.Edit) {
                 await handleFetch(buttonAction, finalForm, editCandidate, id);
             } else {
                 await handleFetch(buttonAction, finalForm, addCandidate);
             }
+            dispatch(AppAPI.util.invalidateTags([
+                { type: RTKTagsEnum.Candidates, id: CandidateListEnum.LIST }
+            ]));
+
             resetForm();
             handleClose();
         } catch (err: any) {

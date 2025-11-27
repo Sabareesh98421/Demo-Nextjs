@@ -1,6 +1,6 @@
 import {AppAPI} from "@/features/RTK/CreateAPI/DefineAppApi";
 import {SignUpFormData, SignUpResponse} from "@/sharedUtils/CustomTypes";
-import {HTTP_Method} from "@/serverUtils/Enums/HTTP_Enum";
+import {HTTP_Method} from "@/sharedUtils/Enums/HTTP_Enum";
 
 export const registerUserAPI = AppAPI.injectEndpoints(
     {

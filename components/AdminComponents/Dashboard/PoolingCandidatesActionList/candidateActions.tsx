@@ -18,15 +18,14 @@ import { useTheme, Snackbar, Alert } from "@mui/material";
 import { addCandidates, DialogFormFields, editCandidateDialog, useDialogBoxHandler } from "@/components/Component.Hooks/DialogBoxHandler";
 import DialogBox from "@/components/DialogBox/DialogBox";
 import { DialogFormStruct, DialogGlobalState, Framework } from "@/sharedUtils/CustomTypes";
-import {useState, useEffect, Suspense} from "react";
+import {useState, useEffect} from "react";
 import { useDeleteCandidateMutation } from "@/features/RTK/Query/Admin/DeleteCandidate/DeleteCandidate";
 import {useAllCandidatesQuery} from "@/features/RTK/Query/Admin/GetAllCandidate/GetAllCandidate";
-import CircularProgress from "@mui/material/CircularProgress";
 
 
 export default function CandidatesActionList({ propsFrameworks }: { propsFrameworks: Framework[] }) {
     const theme = useTheme();
-    const {data,isLoading:isAllCandidateLoading,isFetching}= useAllCandidatesQuery();
+    const {data}= useAllCandidatesQuery();
     const [deleteCandidate, { isSuccess, isError, isLoading }] = useDeleteCandidateMutation();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -40,6 +39,8 @@ export default function CandidatesActionList({ propsFrameworks }: { propsFramewo
     };
 
     const handleDelete = async (candidateId: string) => {
+        const shallProceedToDelete = confirm("Are you sure you want to delete this candidate?");
+        if(!shallProceedToDelete) return;
         try {
             await deleteCandidate(candidateId).unwrap();
         } catch (error) {
@@ -51,7 +52,6 @@ export default function CandidatesActionList({ propsFrameworks }: { propsFramewo
         const editFramework: DialogGlobalState = editCandidateDialog(frameWorkName, candidateId);
         handleOpenDialog(editFramework);
     };
-
 
     useEffect(() => {
         if (isSuccess) {
@@ -65,13 +65,7 @@ export default function CandidatesActionList({ propsFrameworks }: { propsFramewo
             // refetch()
 
     }, [isSuccess, isError]);
-    if (isAllCandidateLoading || isFetching) {
-        return (
-            <Paper sx={{ width: "100%", mt: 4, p: 3, textAlign: "center" }}>
-                <CircularProgress />
-            </Paper>
-        );
-    }
+
     return (
         <>
             <Paper sx={{ width: "100%", mt: 4, p: 3 }}>
@@ -79,7 +73,7 @@ export default function CandidatesActionList({ propsFrameworks }: { propsFramewo
                     className="flex justify-between items-center"
                     sx={{ bgcolor: theme.palette.background.default, p: 2 }}
                 >
-                    <Typography variant="h2" sx={{ fontSize: 16, fontWeight: "Bold" }}>
+                    <Typography variant="h6" sx={{ fontWeight: "Bold" }}>
                         Candidates List
                     </Typography>
 

@@ -1,7 +1,7 @@
 import { AppAPI } from "@/features/RTK/CreateAPI/DefineAppApi";
 import { HTTP_Method } from "@/sharedUtils/Enums/HTTP_Enum";
 import {CandidateListEnum, RTKTagsEnum} from "@/sharedUtils/Enums/RTK_InvalidationTags";
-
+//  check the ID
 const deleteCandidateAPI = AppAPI.injectEndpoints({
     endpoints: (build) => ({
         deleteCandidate: build.mutation<void, string>({

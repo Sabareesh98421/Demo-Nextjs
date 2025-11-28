@@ -40,9 +40,7 @@ export default function DialogBox<T extends FormUIStruct>({ fields }: { fields: 
     const initialFormState = Object.fromEntries(fields.map((f) => [f.name, f.value ?? ""])) as Record<string, unknown>;
     const { finalFormData, handleChange: handleChangeHook, resetForm } = useForm(initialFormState);
     const [errors, setErrors] = useState<Record<string, string>>({});
-
-    const formMethod = buttonAction === ButtonActionType.Edit ? HTTP_Method.PUT : HTTP_Method.POST;
-
+    const formMethod:HTTP_Method.POST|HTTP_Method.PUT = buttonAction === ButtonActionType.Edit ? HTTP_Method.PUT : HTTP_Method.POST;
     useEffect(() => {
         const newState = Object.fromEntries(
             fields.map((f) => {
@@ -181,7 +179,7 @@ export default function DialogBox<T extends FormUIStruct>({ fields }: { fields: 
 }
 
 function toFormData(finalFormData: any) {
-    const newFormData: any = new FormData();
+    const newFormData:FormData = new FormData();
     for (const key in finalFormData) {
         const value = finalFormData[key];
         if (value !== null && value !== undefined) {

@@ -38,7 +38,7 @@ export function PollingList({ frameWorks, getVote, disableRadio }: { disableRadi
         handleVoteClick(eve, setFW);
     }
     return (
-        <List className='w-full h-full grid  sm:grid-cols-2 md:grid-cols-3 '>
+        <List className='w-full h-full grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 '>
             {frameWorks.map(
                 (frameWork, index) => {
                     console.log("frameWork : ",frameWork)

@@ -13,7 +13,7 @@ type isUserValid<T>={
 const fs = new FilesHandling("users.json");
 export async function POST(req:Request){
     const {email,password} = await req.json() as LoginFormData;
-    const loweredEmail=email.toLowerCase();
+    const loweredEmail:string=email.toLowerCase();
     await fs.ensureDataFile([]);
     const {isPasswordMatched,isEmailMatched,data} = await isUserValid(loweredEmail,password)
     const {isValid:isPasswordValidFormate,errors} =  isPasswordValid(password)
@@ -30,7 +30,7 @@ export async function POST(req:Request){
     if(!data){
         return serverResponse({status:500,message:"Unexpected error"});
     }
-    const token = createJWT(loweredEmail,data.role);
+    const token:string = createJWT(loweredEmail,data.role);
     await setCookies(token);
     if(data.role==Role.Admin ){
         return serverResponse({message:"Welcome Admin "});

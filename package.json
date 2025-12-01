@@ -17,6 +17,8 @@
     "@mui/material-nextjs": "^7.3.3",
     "@reduxjs/toolkit": "^2.10.0",
     "chart.js": "^4.5.1",
+    "google-auth-library": "^10.5.0",
+    "googleapis": "^166.0.0",
     "jsonwebtoken": "^9.0.2",
     "next": "16.0.0",
     "react": "19.2.0",

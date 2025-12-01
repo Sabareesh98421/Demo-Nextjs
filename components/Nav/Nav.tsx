@@ -53,7 +53,7 @@ export function Nav() {
 
                     <IconButton
                         edge="end"
-                        sx={{ mr: 2, display: { xs:"block",sm: 'none'  } }}
+                        sx={{ mr: 2, display: { xs:"block",sm:"none",md: 'none'  } }}
                         onClick={() => setOpen(true)}
                     >
                         <MenuIcon />
@@ -69,8 +69,8 @@ export function Nav() {
                     <ThemeToggle />
                     {user?.isAdmin && <AdminNavContent />}
                     {user?.isTokenAvailable && renderDefaultNav(open,() => {
-                        logoutUser();
                         setOpen(false);
+                        logoutUser().then(()=>setOpen(false))
                     })}
                 </Box>
             </Drawer>

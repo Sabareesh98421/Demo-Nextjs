@@ -14,6 +14,7 @@ import {useLoginUserMutation} from "@/features/RTK/Query/loginAPI/Loginapi";
 import {HTTP_Method} from "@/sharedUtils/Enums/HTTP_Enum";
 import Snackbar from "@mui/material/Snackbar";
 import {RTKTagsEnum} from "@/sharedUtils/Enums/RTK_InvalidationTags";
+import GoogleLoginButton from "@/app/(auth)/signIn/_GoogleOAuth/page";
 
 // signIn/page.tsx
 interface ISignInDataForAPi {
@@ -90,7 +91,7 @@ export default function SignIn() {
     return (
         <section className=" w-md p-5 flex justify-center  items-center outline-[0.1px]  shadow-md bg-white text-black flex-col gap-5">
 
-
+            <GoogleLoginButton></GoogleLoginButton>
 
             <Snackbar
                 autoHideDuration={3000}
